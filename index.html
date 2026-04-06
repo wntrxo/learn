@@ -351,31 +351,29 @@
             const data = await res.json();
             allPosts = (data.results || []).map(p => {
                 const props = p.properties;
-                const getText = (prop) => {
+
+                const getRichText = (prop) => {
                     if (!prop) return '';
-                    if (prop.type === 'title') return prop.title.map(t => t.plain_text).join('') || '';
-                    if (prop.type === 'rich_text') return prop.rich_text.map(t => t.plain_text).join('') || '';
-                    if (prop.type === 'url') return prop.url || '';
-                    if (prop.type === 'select') return prop.select?.name || '';
+                    if (prop.type === 'title') return (prop.title || []).map(t => t.plain_text).join('');
+                    if (prop.type === 'rich_text') return (prop.rich_text || []).map(t => t.plain_text).join('');
                     return '';
                 };
-                const findProp = (name) => {
-                    const clean = (s) => s.toLowerCase().replace(/[\s_]/g, '');
-                    const key = Object.keys(props).find(k => clean(k) === clean(name));
-                    return props[key];
-                };
+                const getUrl = (prop) => prop ? (prop.url || '') : '';
+                const getSelect = (prop) => prop ? (prop.select?.name || '') : '';
+                const getCheckbox = (prop) => prop ? (prop.checkbox || false) : false;
+
                 return {
                     id: p.id,
-                    title: getText(findProp('Title') || findProp('Name')),
-                    summary: getText(findProp('Summary')),
-                    topic: getText(findProp('Topic')),
-                    imageLink: getText(findProp('Image Link') || findProp('Image')),
-                    fullExplanation: getText(findProp('Full Explanation') || findProp('Explanation')),
-                    takeaway: getText(findProp('Takeaway')),
-                    youtubeLink: getText(findProp('YouTube Link') || findProp('YouTube') || findProp('Video')),
-                    article1: getText(findProp('Article Link 1') || findProp('Source')),
-                    article2: getText(findProp('Article Link 2')),
-                    bookmarked: props.Bookmarked?.checkbox || false
+                    title: getRichText(props['Title'] || props['Name']),
+                    summary: getRichText(props['Summary']),
+                    topic: getSelect(props['Topic']),
+                    imageLink: getUrl(props['Image Link']),
+                    fullExplanation: getRichText(props['Full Explanation']),
+                    takeaway: getRichText(props['Takeaway']),
+                    youtubeLink: getUrl(props['YouTube Link']),
+                    article1: getUrl(props['Article Link 1']),
+                    article2: getUrl(props['Article Link 2']),
+                    bookmarked: getCheckbox(props['Bookmarked'])
                 };
             });
             buildFilterBar();
@@ -448,7 +446,10 @@
                 <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0; line-height:1.2;">${p.title || 'Untitled'}</h1>
                 <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${p.summary || ''}</p>
                 ${takeaways ? `<span class="section-label">Key Takeaways</span><ul class="takeaway-list">${takeaways}</ul>` : ''}
-                ${(p.fullExplanation && p.fullExplanation.trim()) ? `<span class="section-label">Deep Dive</span><div style="line-height:1.8; font-size:16px; color:var(--text-muted); margin-bottom:32px;">${p.fullExplanation.replace(/\n/g, '<br/>')}</div>` : ''}
+                <span class="section-label">Deep Dive</span>
+                <div style="line-height:1.8; font-size:16px; color:var(--text-muted); margin-bottom:32px;">
+                  ${(p.fullExplanation && p.fullExplanation.trim()) ? p.fullExplanation.replace(/\n/g, '<br/>') : '<span style="opacity:0.4;">No explanation available for this post.</span>'}
+                </div>
                 ${links ? `<span class="section-label">Further Reading</span>${links}` : ''}
             </div>
         `;
