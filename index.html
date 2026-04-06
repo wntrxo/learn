@@ -368,9 +368,15 @@
                     summary: getRichText(props['Summary']),
                     topic: getSelect(props['Topic']),
                     imageLink: getUrl(props['Image Link']),
-                    fullExplanation: getRichText(props['Full Explanation']),
+                    fullExplanation: getRichText(
+                        props['Full Explaination'] || props['Full Explanation']
+                    ),
                     takeaway: getRichText(props['Takeaway']),
-                    youtubeLink: getUrl(props['YouTube Link']),
+                    youtubeLink: getUrl(
+                        props['YouTube Link'] ||
+                        props['Youtube Link'] ||
+                        props['YouTube link']
+                    ),
                     article1: getUrl(props['Article Link 1']),
                     article2: getUrl(props['Article Link 2']),
                     bookmarked: getCheckbox(props['Bookmarked'])
@@ -399,7 +405,6 @@
             card.className = 'post-card';
             card.style.animationDelay = `${i * 0.08}s`;
             card.innerHTML = `
-                <span class="post-topic">${p.topic || 'General'}</span>
                 <div class="post-title">${p.title || 'Untitled'}</div>
                 <div class="post-summary">${p.summary || ''}</div>
             `;
@@ -433,8 +438,26 @@
         currentPost = p;
         const detail = document.getElementById('detailScroll');
         const takeaways = p.takeaway ? p.takeaway.split('\n').filter(t=>t.trim()).map(t => `<li class="takeaway-item">${t.replace(/^[-•*]\s*/, '')}</li>`).join('') : '';
+        const getEmbedUrl = (url) => {
+            if (!url) return '';
+            return url
+                .replace('watch?v=', 'embed/')
+                .replace('youtu.be/', 'youtube.com/embed/');
+        };
+
+        const videoEmbed = p.youtubeLink
+            ? `<iframe 
+                width="100%" 
+                height="220" 
+                src="${getEmbedUrl(p.youtubeLink)}" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen
+                style="border-radius:14px; margin-bottom:20px;">
+              </iframe>`
+            : '';
+
         const links = [
-            p.youtubeLink ? `<a href="${p.youtubeLink}" target="_blank" class="link-btn">▶️ Watch on YouTube</a>` : '',
             p.article1 ? `<a href="${p.article1}" target="_blank" class="link-btn">📄 Source Article 1</a>` : '',
             p.article2 ? `<a href="${p.article2}" target="_blank" class="link-btn">📄 Source Article 2</a>` : ''
         ].join('');
@@ -446,6 +469,7 @@
                 <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0; line-height:1.2;">${p.title || 'Untitled'}</h1>
                 <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${p.summary || ''}</p>
                 ${takeaways ? `<span class="section-label">Key Takeaways</span><ul class="takeaway-list">${takeaways}</ul>` : ''}
+                ${videoEmbed}
                 <span class="section-label">Deep Dive</span>
                 <div style="line-height:1.8; font-size:16px; color:var(--text-muted); margin-bottom:32px;">
                   ${(p.fullExplanation && p.fullExplanation.trim()) ? p.fullExplanation.replace(/\n/g, '<br/>') : '<span style="opacity:0.4;">No explanation available for this post.</span>'}
