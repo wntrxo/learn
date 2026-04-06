@@ -76,8 +76,9 @@
             background: var(--surface); 
             border: 1px solid var(--border); 
             border-radius: var(--radius); 
-            padding: 24px;
-            aspect-ratio: 1 / 1; /* Force perfect square */
+            padding: 30px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -89,9 +90,9 @@
         }
         .post-card:active { transform: scale(0.96); }
         
-        .post-topic { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; letter-spacing: 1px; }
-        .post-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; line-height: 1.2; margin-bottom: 12px; color: var(--text); }
-        .post-summary { font-size: 15px; color: var(--text-muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-topic { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; letter-spacing: 1.2px; }
+        .post-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900; line-height: 1.15; margin-bottom: 14px; color: var(--text); }
+        .post-summary { font-size: 16px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
         /* DETAIL VIEW */
         .detail-header-img { width: 100%; height: 260px; object-fit: cover; background: var(--surface2); }
@@ -125,12 +126,39 @@
         .chat-fab svg { width: 30px; height: 30px; fill: white; }
 
         /* CHAT SCREEN */
-        #chatScreen { z-index: 200; border-radius: 30px 30px 0 0; transform: translateY(100%); top: 10%; background: var(--surface); }
-        #chatScreen.active { transform: translateY(0); }
+        #chatScreen { 
+            z-index: 200; 
+            border-radius: 30px 30px 0 0; 
+            transform: translateY(100%); 
+            top: 10%; 
+            background: var(--surface); 
+            display: flex; 
+            flex-direction: column; 
+            visibility: hidden;
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, visibility 0.3s;
+        }
+        #chatScreen.active { 
+            transform: translateY(0); 
+            visibility: visible;
+            opacity: 1;
+        }
         .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
         .msg { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 15px; line-height: 1.5; }
         .msg.ai { align-self: flex-start; background: var(--bg); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
         .msg.user { align-self: flex-end; background: var(--accent); color: white; border-bottom-right-radius: 4px; }
+
+        .overlay { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.7); 
+            opacity: 0; 
+            pointer-events: none; 
+            transition: 0.3s; 
+            z-index: 150; 
+            backdrop-filter: blur(4px);
+        }
+        .overlay.visible { opacity: 1; pointer-events: auto; }
 
         /* BOTTOM NAV */
         .bottom-nav { height: var(--nav-h); display: flex; border-top: 1px solid var(--border); background: var(--bg); padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
@@ -230,7 +258,7 @@
     <div class="screen" id="chatScreen">
         <div class="header">
             <div class="header-title">AI Tutor</div>
-            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:28px; padding:10px;">×</button>
+            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:34px; padding:10px; cursor:pointer; line-height:1;">×</button>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div style="padding:20px; background: var(--bg); border-top: 1px solid var(--border);">
@@ -301,8 +329,8 @@
                 const props = p.properties;
                 const getText = (prop) => {
                     if (!prop) return '';
-                    if (prop.type === 'title') return prop.title[0]?.plain_text || '';
-                    if (prop.type === 'rich_text') return prop.rich_text[0]?.plain_text || '';
+                    if (prop.type === 'title') return prop.title.map(t => t.plain_text).join('') || '';
+                    if (prop.type === 'rich_text') return prop.rich_text.map(t => t.plain_text).join('') || '';
                     if (prop.type === 'url') return prop.url || '';
                     if (prop.type === 'select') return prop.select?.name || '';
                     return '';
@@ -425,7 +453,8 @@
         input.value = '';
         const context = `Post Content: ${currentPost.title}\nTopic: ${currentPost.topic}\nSummary: ${currentPost.summary}\nExplanation: ${currentPost.fullExplanation}`;
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            // Using v1 and models/gemini-1.5-flash
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: "Context: " + context + "\n\nQuestion: " + text }] }] })
             });
