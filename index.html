@@ -22,7 +22,7 @@
             --text: #e8e8e6;
             --text-muted: #6b6b6b;
             --danger: #b85555;
-            --radius: 14px;
+            --radius: 20px;
             --nav-h: 75px;
             --header-h: 60px;
         }
@@ -44,75 +44,103 @@
         .header-title span { color: var(--accent); }
 
         .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
-        .icon-btn:active { transform: scale(0.9); background: var(--surface2); }
+        .icon-btn:active { transform: scale(0.9); }
 
         .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 15px; font-weight: 600; cursor: pointer; }
         .back-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 2.5; }
 
-        /* SETUP */
+        /* SETUP SCREEN */
         #setupScreen { transform: translateX(0); justify-content: center; padding: 40px 28px; z-index: 100; display: none; }
         #setupScreen.active { display: flex; }
         .setup-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
         .setup-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 14px; outline: none; margin-bottom: 4px; }
+        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 14px; outline: none; margin-bottom: 12px; }
         .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; }
 
-        /* FEED */
-        .filter-bar { padding: 12px 0 12px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
+        /* INSTAGRAM-STYLE FEED */
+        .filter-bar { padding: 12px 0 12px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); font-size: 13px; white-space: nowrap; }
         .filter-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-        .feed { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: none; }
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: 0.2s; animation: cardIn 0.4s ease forwards; opacity: 0; }
-        @keyframes cardIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .post-image { width: 100%; height: 180px; object-fit: cover; background: var(--surface2); }
-        .post-body { padding: 16px; }
-        .post-topic { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
-        .post-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
-        .post-summary { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+        .feed { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 24px; 
+            scrollbar-width: none; 
+        }
+        
+        .post-card { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 24px;
+            aspect-ratio: 1 / 1; /* Force perfect square */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            animation: cardIn 0.5s ease forwards; 
+            opacity: 0; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .post-card:active { transform: scale(0.96); }
+        
+        .post-topic { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; letter-spacing: 1px; }
+        .post-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; line-height: 1.2; margin-bottom: 12px; color: var(--text); }
+        .post-summary { font-size: 15px; color: var(--text-muted); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* NAV */
-        .bottom-nav { height: var(--nav-h); display: flex; border-top: 1px solid var(--border); background: var(--bg); padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); }
-        .nav-item.active { color: var(--accent); }
-        .nav-item svg { width: 28px; height: 28px; stroke-width: 2.2; }
-        .nav-item span { font-size: 11px; font-weight: 600; }
+        /* DETAIL VIEW */
+        .detail-header-img { width: 100%; height: 260px; object-fit: cover; background: var(--surface2); }
+        .detail-body { padding: 24px 20px 140px; }
+        .section-label { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin: 36px 0 16px; display: block; }
+        
+        .takeaway-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .takeaway-item { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 14px; font-size: 15px; border-left: 5px solid var(--accent); line-height: 1.5; }
+        
+        .link-btn { display: flex; align-items: center; gap: 12px; background: var(--surface); padding: 16px; border-radius: 14px; text-decoration: none; color: var(--text); font-weight: 600; margin-bottom: 10px; border: 1px solid var(--border); font-size: 15px; transition: 0.2s; }
+        .link-btn:active { background: var(--surface2); transform: scale(0.98); }
 
-        /* SETTINGS MENU */
-        .settings-menu { padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
-        .menu-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; display: flex; align-items: center; gap: 16px; }
-        .menu-icon { font-size: 20px; }
-        .menu-title { font-size: 16px; font-weight: 600; }
-
-        /* CHAT FAB - FIXED IN BOTTOM RIGHT */
+        /* CHAT BUBBLE */
         .chat-fab { 
             position: fixed; 
             bottom: calc(var(--nav-h) + 20px); 
             right: 20px; 
-            width: 56px; 
-            height: 56px; 
+            width: 64px; 
+            height: 64px; 
             background: var(--accent); 
             border-radius: 50%; 
-            display: none; /* Controlled by JS */
+            display: none; 
             align-items: center; 
             justify-content: center; 
-            z-index: 90; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
-            transition: transform 0.2s;
+            z-index: 100; 
+            box-shadow: 0 12px 32px rgba(0,0,0,0.5); 
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .chat-fab:active { transform: scale(0.9); }
-        .chat-fab svg { width: 26px; height: 26px; fill: white; }
+        .chat-fab.visible { display: flex; }
+        .chat-fab:active { transform: scale(0.85); }
+        .chat-fab svg { width: 30px; height: 30px; fill: white; }
 
         /* CHAT SCREEN */
-        #chatScreen { z-index: 200; border-radius: 24px 24px 0 0; transform: translateY(100%); top: 10%; }
+        #chatScreen { z-index: 200; border-radius: 30px 30px 0 0; transform: translateY(100%); top: 10%; background: var(--surface); }
         #chatScreen.active { transform: translateY(0); }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; }
-        .msg.ai { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 4px; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .msg { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 15px; line-height: 1.5; }
+        .msg.ai { align-self: flex-start; background: var(--bg); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
         .msg.user { align-self: flex-end; background: var(--accent); color: white; border-bottom-right-radius: 4px; }
 
-        .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; opacity: 0.7; }
-        .spinner { width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        /* BOTTOM NAV */
+        .bottom-nav { height: var(--nav-h); display: flex; border-top: 1px solid var(--border); background: var(--bg); padding-bottom: env(safe-area-inset-bottom); flex-shrink: 0; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); transition: 0.2s; }
+        .nav-item.active { color: var(--accent); }
+        .nav-item svg { width: 32px; height: 32px; stroke-width: 2.2; }
+        .nav-item span { font-size: 11px; font-weight: 700; }
+
+        .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; opacity: 0.6; }
+        .spinner { width: 36px; height: 36px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
@@ -120,31 +148,25 @@
 
     <div class="overlay" id="overlay" onclick="closeChat()"></div>
 
-    <!-- ===== SETUP SCREEN ===== -->
+    <!-- SETUP SCREEN -->
     <div class="screen" id="setupScreen">
-        <div style="text-align:center; margin-bottom: 20px;">
-            <div class="header-title" style="font-size: 40px;">Learn<span>.</span></div>
-            <p style="opacity:0.6;">Connect your Notion workspace</p>
-        </div>
+        <div style="text-align:center; margin-bottom: 24px;"><div class="header-title" style="font-size: 48px;">Learn<span>.</span></div></div>
         <div class="setup-card">
-            <span class="setup-label">Notion Token</span>
-            <input class="setup-input" type="password" id="setupNotionKey" placeholder="secret_xxxx"/>
-            <span class="setup-label">Database ID</span>
-            <input class="setup-input" type="text" id="setupDbId" placeholder="32 chars"/>
-            <span class="setup-label">Gemini API Key</span>
-            <input class="setup-input" type="password" id="setupGeminiKey" placeholder="AIzaSy..."/>
+            <span class="setup-label">Notion Token</span><input class="setup-input" type="password" id="setupNotionKey" placeholder="secret_xxxx"/>
+            <span class="setup-label">Database ID</span><input class="setup-input" type="text" id="setupDbId" placeholder="32 characters"/>
+            <span class="setup-label">Gemini API Key</span><input class="setup-input" type="password" id="setupGeminiKey" placeholder="AIzaSy..."/>
         </div>
         <button class="primary-btn" onclick="saveSetup()">Start Learning →</button>
     </div>
 
-    <!-- ===== MAIN SCREEN ===== -->
+    <!-- MAIN SCREEN -->
     <div class="screen active" id="mainScreen">
         <div class="header">
             <div class="header-title" id="mainHeaderTitle">Learn<span>.</span></div>
             <div class="icon-btn" onclick="refreshFeed()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
             <div class="icon-btn" onclick="showSettingsMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         </div>
-        <div class="filter-bar" id="filterBar"><div class="filter-chip active" data-topic="All" onclick="filterTopic(this)">All</div></div>
+        <div class="filter-bar" id="filterBar"></div>
         <div class="feed" id="feed"></div>
         <div class="bottom-nav">
             <div class="nav-item active" id="nav-feed" onclick="showTab('feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
@@ -152,13 +174,13 @@
         </div>
     </div>
 
-    <!-- SETTINGS SCREEN -->
+    <!-- SETTINGS MENU -->
     <div class="screen" id="settingsMenuScreen">
         <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div class="settings-menu">
-            <div class="menu-item" onclick="showScreen('settingsAppearanceScreen')"><div class="menu-icon">🎨</div><div class="menu-text"><div class="menu-title">Appearance</div></div></div>
-            <div class="menu-item" onclick="showScreen('settingsCredentialsScreen')"><div class="menu-icon">🔑</div><div class="menu-text"><div class="menu-title">Credentials</div></div></div>
-            <div class="menu-item" onclick="clearAllData()" style="color:var(--danger);"><div class="menu-icon">🗑️</div><div class="menu-text"><div class="menu-title">Reset App</div></div></div>
+            <div class="menu-item" onclick="showScreen('settingsAppearanceScreen')"><div class="menu-icon">🎨</div><div class="menu-title">Appearance</div></div>
+            <div class="menu-item" onclick="showScreen('settingsCredentialsScreen')"><div class="menu-icon">🔑</div><div class="menu-title">Credentials</div></div>
+            <div class="menu-item" onclick="clearAllData()" style="color:var(--danger);"><div class="menu-icon">🗑️</div><div class="menu-title">Reset App</div></div>
         </div>
     </div>
 
@@ -177,7 +199,7 @@
     <!-- SETTINGS: CREDENTIALS -->
     <div class="screen" id="settingsCredentialsScreen">
         <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
-        <div style="padding:20px;">
+        <div style="padding:24px;">
             <div class="setup-card">
                 <span class="setup-label">Notion Token</span><input class="setup-input" type="password" id="setNotionKey"/>
                 <span class="setup-label">Database ID</span><input class="setup-input" type="text" id="setDbId"/>
@@ -193,23 +215,23 @@
             <div class="back-btn" onclick="closePost()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div>
             <div id="detailBookmarkBtn" style="margin-left:auto; cursor:pointer;" onclick="toggleDetailBookmark()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
         </div>
-        <div id="detailScroll" style="flex:1; overflow-y:auto; padding-bottom: 100px;"></div>
+        <div id="detailScroll" style="flex:1; overflow-y:auto;"></div>
         
         <!-- CHAT BUBBLE (Only visible here) -->
         <div class="chat-fab" id="chatFab" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
     </div>
 
     <!-- CHAT SCREEN -->
-    <div class="screen" id="chatScreen" style="background: var(--surface);">
-        <div class="header" style="background: var(--surface); border-radius: 20px 20px 0 0;">
+    <div class="screen" id="chatScreen">
+        <div class="header">
             <div class="header-title">AI Tutor</div>
-            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:24px; padding:10px;">×</button>
+            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:28px; padding:10px;">×</button>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
-        <div style="padding:16px; background: var(--bg); border-top: 1px solid var(--border);">
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="chatInput" class="setup-input" style="margin-bottom:0;" placeholder="Ask about this post..." onkeydown="if(event.key==='Enter') sendChatMessage()"/>
-                <button class="icon-btn" onclick="sendChatMessage()" style="background:var(--accent); border:none; color:white;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+        <div style="padding:20px; background: var(--bg); border-top: 1px solid var(--border);">
+            <div style="display:flex; gap:12px;">
+                <input type="text" id="chatInput" class="setup-input" style="margin-bottom:0;" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()"/>
+                <button class="icon-btn" onclick="sendChatMessage()" style="background:var(--accent); border:none; color:white; width:50px; height:50px; border-radius:15px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
             </div>
         </div>
     </div>
@@ -221,41 +243,21 @@
     let currentView = 'feed';
     let screenStack = ['mainScreen'];
 
-    const store = {
-        get: k => localStorage.getItem(k),
-        set: (k, v) => localStorage.setItem(k, v),
-        del: k => localStorage.removeItem(k)
-    };
+    const store = { get: k => localStorage.getItem(k), set: (k, v) => localStorage.setItem(k, v), del: k => localStorage.removeItem(k) };
 
     window.onload = () => {
         applyTheme(store.get('theme') || 'warm');
-        if (!store.get('notion_key')) {
-            showScreen('setupScreen');
-        } else {
-            loadFeed();
-        }
+        if (!store.get('notion_key')) { showScreen('setupScreen'); } else { loadFeed(); }
     };
 
-    function showScreen(id) {
-        if (screenStack[screenStack.length-1] !== id) screenStack.push(id);
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-
-    function goBack() {
-        if (screenStack.length > 1) {
-            screenStack.pop();
-            const prev = screenStack[screenStack.length-1];
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(prev).classList.add('active');
-        }
-    }
+    function showScreen(id) { if (screenStack[screenStack.length-1] !== id) screenStack.push(id); document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+    function goBack() { if (screenStack.length > 1) { screenStack.pop(); const prev = screenStack[screenStack.length-1]; document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(prev).classList.add('active'); } }
 
     function saveSetup() {
         const nk = document.getElementById('setupNotionKey').value.trim();
         const db = document.getElementById('setupDbId').value.trim();
         const gk = document.getElementById('setupGeminiKey').value.trim();
-        if (!nk || !db) return alert('Credentials required');
+        if (!nk || !db) return alert('Token and Database ID are required.');
         store.set('notion_key', nk); store.set('notion_db', db);
         if(gk) store.set('gemini_key', gk);
         location.reload();
@@ -272,7 +274,7 @@
         store.set('notion_key', document.getElementById('setNotionKey').value.trim());
         store.set('notion_db', document.getElementById('setDbId').value.trim());
         store.set('gemini_key', document.getElementById('setGeminiKey').value.trim());
-        alert('Saved');
+        alert('Credentials Saved');
         location.reload();
     }
 
@@ -287,24 +289,37 @@
             const res = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
-                body: JSON.stringify({})
+                body: JSON.stringify({ sorts: [{ property: "Date Added", direction: "descending" }] })
             });
             const data = await res.json();
             allPosts = (data.results || []).map(p => {
                 const props = p.properties;
+                const getText = (prop) => {
+                    if (!prop) return '';
+                    if (prop.type === 'title') return prop.title[0]?.plain_text || '';
+                    if (prop.type === 'rich_text') return prop.rich_text[0]?.plain_text || '';
+                    if (prop.type === 'url') return prop.url || '';
+                    if (prop.type === 'select') return prop.select?.name || '';
+                    return '';
+                };
                 return {
                     id: p.id,
-                    title: props.Title?.title[0]?.plain_text || 'Untitled',
-                    summary: props.Summary?.rich_text[0]?.plain_text || '',
-                    topic: props.Topic?.select?.name || 'General',
-                    imageLink: props['Image Link']?.url || '',
+                    title: getText(props.Title),
+                    summary: getText(props.Summary),
+                    topic: getText(props.Topic),
+                    imageLink: getText(props['Image Link']),
+                    fullExplanation: getText(props['Full Explanation']),
+                    takeaway: getText(props.Takeaway),
+                    youtubeLink: getText(props['YouTube Link']),
+                    article1: getText(props['Article Link 1']),
+                    article2: getText(props['Article Link 2']),
                     bookmarked: props.Bookmarked?.checkbox || false
                 };
             });
             buildFilterBar();
             renderFeed();
         } catch (e) {
-            feed.innerHTML = '<p style="padding:40px; text-align:center;">Failed to connect to Notion.</p>';
+            feed.innerHTML = '<p style="padding:40px; text-align:center;">Could not load feed. Check Notion connection.</p>';
         }
     }
 
@@ -314,17 +329,19 @@
         let posts = currentView === 'bookmarks' ? allPosts.filter(p => p.bookmarked) : allPosts;
         if (currentFilter !== 'All') posts = posts.filter(p => p.topic === currentFilter);
 
+        if (posts.length === 0) {
+            feed.innerHTML = '<div class="loading"><p>No posts found in this category.</p></div>';
+            return;
+        }
+
         posts.forEach((p, i) => {
             const card = document.createElement('div');
             card.className = 'post-card';
-            card.style.animationDelay = `${i * 0.05}s`;
+            card.style.animationDelay = `${i * 0.08}s`;
             card.innerHTML = `
-                ${p.imageLink ? `<img src="${p.imageLink}" class="post-image">` : `<div style="height:100px; display:flex; align-items:center; justify-content:center; font-size:40px; background:var(--surface2);">📖</div>`}
-                <div class="post-body">
-                    <span class="post-topic">${p.topic}</span>
-                    <div class="post-title">${p.title}</div>
-                    <div class="post-summary">${p.summary}</div>
-                </div>
+                <span class="post-topic">${p.topic}</span>
+                <div class="post-title">${p.title}</div>
+                <div class="post-summary">${p.summary}</div>
             `;
             card.onclick = () => openPost(p);
             feed.appendChild(card);
@@ -355,66 +372,61 @@
     function openPost(p) {
         currentPost = p;
         const detail = document.getElementById('detailScroll');
+        
+        const takeaways = p.takeaway ? p.takeaway.split('\n').filter(t=>t.trim()).map(t => `<li class="takeaway-item">${t.replace(/^[-•*]\s*/, '')}</li>`).join('') : '';
+        const links = [
+            p.youtubeLink ? `<a href="${p.youtubeLink}" target="_blank" class="link-btn">▶️ Watch on YouTube</a>` : '',
+            p.article1 ? `<a href="${p.article1}" target="_blank" class="link-btn">📄 Source Article 1</a>` : '',
+            p.article2 ? `<a href="${p.article2}" target="_blank" class="link-btn">📄 Source Article 2</a>` : ''
+        ].join('');
+
         detail.innerHTML = `
-            <div style="padding:20px;">
-                ${p.imageLink ? `<img src="${p.imageLink}" style="width:100%; border-radius:12px; margin-bottom:20px;">` : ''}
+            ${p.imageLink ? `<img src="${p.imageLink}" class="detail-header-img">` : ''}
+            <div class="detail-body">
                 <span class="post-topic">${p.topic}</span>
-                <h1 style="font-family:'Playfair Display'; font-size:28px; margin:10px 0;">${p.title}</h1>
-                <div style="height:2px; width:40px; background:var(--accent); margin-bottom:20px;"></div>
-                <p style="color:var(--text-muted); line-height:1.8; font-size:16px;">${p.summary}</p>
-                <div style="margin-top:30px; padding:20px; background:var(--surface); border-radius:12px; border-left: 4px solid var(--accent);">
-                    <h3 style="margin-bottom:10px;">Deep Dive</h3>
-                    <p style="opacity:0.8;">Use the AI Tutor bubble in the corner to ask specific questions about this topic!</p>
-                </div>
+                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0; line-height:1.2;">${p.title}</h1>
+                <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${p.summary}</p>
+                
+                ${takeaways ? `<span class="section-label">Key Takeaways</span><ul class="takeaway-list">${takeaways}</ul>` : ''}
+                
+                ${p.fullExplanation ? `<span class="section-label">Deep Dive</span><div style="line-height:1.8; font-size:16px; white-space:pre-wrap; opacity:0.9;">${p.fullExplanation}</div>` : ''}
+                
+                ${links ? `<span class="section-label">Further Reading</span>${links}` : ''}
             </div>
         `;
         document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = p.bookmarked ? 'var(--accent)' : 'none';
-        document.getElementById('chatFab').style.display = 'flex'; // Show Chat Bubble
+        document.getElementById('chatFab').classList.add('visible');
         showScreen('detailScreen');
     }
 
-    function closePost() {
-        document.getElementById('chatFab').style.display = 'none'; // Hide Chat Bubble
-        goBack();
-    }
+    function closePost() { document.getElementById('chatFab').classList.remove('visible'); document.getElementById('chatMessages').innerHTML = ''; goBack(); }
 
     function openChat() {
         document.getElementById('chatScreen').classList.add('active');
         document.getElementById('overlay').classList.add('visible');
         if (document.getElementById('chatMessages').children.length === 0) {
-            addChatMsg('ai', `Hi! I'm your AI Tutor. I've read about "${currentPost.title}". What would you like to know more about?`);
+            addChatMsg('ai', `I'm here to help you understand "${currentPost.title}" better. Ask me any questions you have!`);
         }
     }
 
-    function closeChat() {
-        document.getElementById('chatScreen').classList.remove('active');
-        document.getElementById('overlay').classList.remove('visible');
-    }
+    function closeChat() { document.getElementById('chatScreen').classList.remove('active'); document.getElementById('overlay').classList.remove('visible'); }
 
     async function sendChatMessage() {
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         const apiKey = store.get('gemini_key');
-        if (!text) return;
-        if (!apiKey) return alert('Please add Gemini API key in Settings.');
-
+        if (!text || !apiKey) return;
         addChatMsg('user', text);
         input.value = '';
-
-        const context = `You are a helpful AI tutor. The user is reading a post titled "${currentPost.title}" which is about "${currentPost.topic}". The summary is: "${currentPost.summary}". Please answer their questions specifically based on this context.`;
-        
+        const context = `Post Content: ${currentPost.title}\nTopic: ${currentPost.topic}\nSummary: ${currentPost.summary}\nExplanation: ${currentPost.fullExplanation}`;
         try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: context + "\n\nUser Question: " + text }] }] })
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: "Context: " + context + "\n\nQuestion: " + text }] }] })
             });
             const data = await res.json();
-            const reply = data.candidates[0].content.parts[0].text;
-            addChatMsg('ai', reply);
-        } catch (e) {
-            addChatMsg('ai', 'Sorry, I had trouble connecting to the AI brain.');
-        }
+            addChatMsg('ai', data.candidates[0].content.parts[0].text);
+        } catch (e) { addChatMsg('ai', 'Error connecting to AI Tutor.'); }
     }
 
     function addChatMsg(role, text) {
@@ -426,13 +438,15 @@
         chat.scrollTop = chat.scrollHeight;
     }
 
-    function applyTheme(name) {
-        document.body.className = `theme-${name}`;
-        store.set('theme', name);
-    }
+    function applyTheme(name) { document.body.className = `theme-${name}`; store.set('theme', name); }
     function setTheme(n) { applyTheme(n); }
-    function clearAllData() { if(confirm('Reset app?')) { localStorage.clear(); location.reload(); } }
+    function clearAllData() { if(confirm('Erase all data and reset?')) { localStorage.clear(); location.reload(); } }
     function refreshFeed() { loadFeed(); }
+    async function toggleDetailBookmark() {
+        if(!currentPost) return;
+        currentPost.bookmarked = !currentPost.bookmarked;
+        document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = currentPost.bookmarked ? 'var(--accent)' : 'none';
+    }
 </script>
 </body>
 </html>
