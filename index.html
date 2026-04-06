@@ -6,7 +6,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="apple-mobile-web-app-title" content="Learn"/>
-    <!-- Better icon support for iOS -->
     <link rel="apple-touch-icon" href="https://via.placeholder.com/192x192/c8824a/ffffff?text=L">
     <title>Learn</title>
     <link rel="manifest" href="manifest.json"/>
@@ -18,289 +17,103 @@
             --surface2: #272727;
             --surface3: #2f2f2f;
             --border: rgba(255,255,255,0.06);
-            --border2: rgba(255,255,255,0.1);
             --accent: #c8824a;
-            --accent-dim: rgba(200,130,74,0.12);
-            --accent-glow: rgba(200,130,74,0.2);
-            --accent-light: #d9966a;
+            --accent-dim: rgba(200,130,74,0.15);
             --text: #e8e8e6;
             --text-muted: #6b6b6b;
-            --text-dim: #3d3d3d;
             --danger: #b85555;
-            --radius: 12px;
-            --nav-h: 70px;
+            --radius: 14px;
+            --nav-h: 75px;
             --header-h: 60px;
         }
 
-        .theme-warm {
-            --bg: #191919; --surface: #202020; --surface2: #272727;
-            --surface3: #2f2f2f; --accent: #c8824a; --accent-light: #d9966a;
-            --accent-dim: rgba(200,130,74,0.12);
-            --text: #e8e8e6; --text-muted: #6b6b6b; --text-dim: #3d3d3d;
-        }
-        .theme-slate {
-            --bg: #191919; --surface: #202020; --surface2: #272727;
-            --surface3: #2f2f2f; --accent: #6b9fe4; --accent-light: #85b3ec;
-            --accent-dim: rgba(107,159,228,0.12);
-            --text: #e8e8e6; --text-muted: #6b6b6b; --text-dim: #3d3d3d;
-        }
-        .theme-forest {
-            --bg: #191919; --surface: #202020; --surface2: #272727;
-            --surface3: #2f2f2f; --accent: #6ab870; --accent-light: #82cc88;
-            --accent-dim: rgba(106,184,112,0.12);
-            --text: #e8e8e6; --text-muted: #6b6b6b; --text-dim: #3d3d3d;
-        }
-        .theme-rose {
-            --bg: #191919; --surface: #202020; --surface2: #272727;
-            --surface3: #2f2f2f; --accent: #c96882; --accent-light: #d9829a;
-            --accent-dim: rgba(201,104,130,0.12);
-            --text: #e8e8e6; --text-muted: #6b6b6b; --text-dim: #3d3d3d;
-        }
-        .theme-light {
-            --bg: #f7f7f5; --surface: #ffffff; --surface2: #f0f0ee;
-            --surface3: #e8e8e5; --border: rgba(0,0,0,0.07); --border2: rgba(0,0,0,0.12);
-            --accent: #b07040; --accent-light: #c8824a; --accent-dim: rgba(176,112,64,0.1);
-            --text: #1a1a1a; --text-muted: #888; --text-dim: #bbb;
-        }
+        .theme-warm { --bg: #191919; --surface: #202020; --accent: #c8824a; }
+        .theme-slate { --bg: #14161a; --surface: #1c1f26; --accent: #6b9fe4; }
+        .theme-forest { --bg: #141a16; --surface: #1c261f; --accent: #6ab870; }
+        .theme-rose { --bg: #1a1416; --surface: #261c1f; --accent: #c96882; }
+        .theme-light { --bg: #f7f7f5; --surface: #ffffff; --accent: #b07040; --text: #1a1a1a; --text-muted: #888; --border: rgba(0,0,0,0.08); }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
 
-        html, body {
-            height: 100%; overflow: hidden;
-            background: var(--bg); color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 15px; line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ===== SCREENS ===== */
-        .screen {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
-            background: var(--bg);
-            transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-            will-change: transform;
-            z-index: 10;
-        }
+        .screen { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--bg); transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index: 10; }
         .screen.active { transform: translateX(0); }
 
-        /* ===== HEADER ===== */
-        .header {
-            height: var(--header-h);
-            display: flex; align-items: center;
-            padding: 0 20px; gap: 14px;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg);
-            position: relative; z-index: 20;
-            flex-shrink: 0;
-            padding-top: env(safe-area-inset-top);
-        }
-
-        .header-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px; font-weight: 700;
-            color: var(--text); letter-spacing: -0.5px;
-            flex: 1;
-        }
-
+        .header { height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; padding-top: env(safe-area-inset-top); }
+        .header-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; flex: 1; }
         .header-title span { color: var(--accent); }
 
-        .icon-btn {
-            width: 40px; height: 40px;
-            border-radius: 12px; border: 1px solid var(--border);
-            background: var(--surface); color: var(--text-muted);
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 18px;
-            transition: all 0.2s;
-        }
-        .icon-btn:active { transform: scale(0.92); background: var(--surface2); }
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .icon-btn:active { transform: scale(0.9); background: var(--surface2); }
 
-        .back-btn {
-            display: flex; align-items: center; gap: 8px;
-            color: var(--accent); font-size: 15px; font-weight: 500;
-            cursor: pointer; padding: 10px 0;
-        }
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 15px; font-weight: 600; cursor: pointer; }
         .back-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 2.5; }
 
-        /* ===== SETUP SCREEN ===== */
-        #setupScreen {
-            transform: translateX(0);
-            align-items: center; justify-content: center;
-            padding: 40px 28px;
-            z-index: 100;
-            display: none; /* Hidden by default, shown by JS */
-        }
+        /* SETUP */
+        #setupScreen { transform: translateX(0); justify-content: center; padding: 40px 28px; z-index: 100; display: none; }
         #setupScreen.active { display: flex; }
+        .setup-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
+        .setup-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 14px; outline: none; margin-bottom: 4px; }
+        .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; }
 
-        .setup-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 52px; font-weight: 900;
-            color: var(--text); letter-spacing: -2px;
-            margin-bottom: 4px;
-        }
-        .setup-logo span { color: var(--accent); }
+        /* FEED */
+        .filter-bar { padding: 12px 0 12px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
+        .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); font-size: 13px; white-space: nowrap; }
+        .filter-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-        .setup-tagline {
-            color: var(--text-muted); font-size: 14px;
-            font-weight: 300; margin-bottom: 48px; text-align: center;
-        }
+        .feed { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; scrollbar-width: none; }
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: 0.2s; animation: cardIn 0.4s ease forwards; opacity: 0; }
+        @keyframes cardIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .post-image { width: 100%; height: 180px; object-fit: cover; background: var(--surface2); }
+        .post-body { padding: 16px; }
+        .post-topic { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+        .post-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+        .post-summary { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
 
-        .setup-card {
-            width: 100%; background: var(--surface);
-            border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 24px; margin-bottom: 16px;
-        }
-
-        .setup-label {
-            font-size: 11px; font-weight: 500;
-            text-transform: uppercase; letter-spacing: 1px;
-            color: var(--accent); margin-bottom: 10px; display: block;
-        }
-
-        .setup-input {
-            width: 100%; background: var(--surface2);
-            border: 1px solid var(--border); border-radius: 10px;
-            color: var(--text); font-family: 'DM Sans', sans-serif;
-            font-size: 14px; padding: 12px 14px; outline: none;
-            transition: border-color 0.2s;
-        }
-        .setup-input:focus { border-color: var(--accent); }
-
-        .primary-btn {
-            width: 100%; background: var(--accent);
-            color: #fff; border: none; border-radius: 14px;
-            padding: 16px; font-family: 'Playfair Display', serif;
-            font-size: 18px; font-weight: 700; cursor: pointer;
-            transition: all 0.2s; letter-spacing: -0.3px;
-        }
-        .primary-btn:active { opacity: 0.85; transform: scale(0.98); }
-
-        /* ===== MAIN SCREEN ===== */
-        #mainScreen { transform: translateX(0); }
-
-        /* ===== TOPIC FILTER BAR ===== */
-        .filter-bar {
-            padding: 12px 0 12px 16px;
-            display: flex; gap: 8px;
-            overflow-x: auto; flex-shrink: 0;
-            border-bottom: 1px solid var(--border);
-            scrollbar-width: none;
-        }
-        .filter-bar::-webkit-scrollbar { display: none; }
-
-        .filter-chip {
-            padding: 8px 16px; border-radius: 20px;
-            border: 1px solid var(--border);
-            background: var(--surface); color: var(--text-muted);
-            font-size: 13px; white-space: nowrap; cursor: pointer;
-            transition: all 0.2s; flex-shrink: 0;
-        }
-        .filter-chip.active {
-            background: var(--accent-dim); border-color: var(--accent);
-            color: var(--accent-light); font-weight: 500;
-        }
-
-        /* ===== FEED ===== */
-        .feed {
-            flex: 1; overflow-y: auto;
-            padding: 16px; display: flex; flex-direction: column; gap: 16px;
-            scrollbar-width: none;
-        }
-        .feed::-webkit-scrollbar { display: none; }
-
-        .post-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden; cursor: pointer;
-            transition: all 0.2s;
-            animation: cardIn 0.4s ease forwards;
-            opacity: 0;
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .post-card:active { transform: scale(0.97); border-color: var(--border2); }
-
-        .post-image { width: 100%; height: 200px; object-fit: cover; display: block; background: var(--surface2); }
-        .post-image-placeholder { width: 100%; height: 200px; background: linear-gradient(135deg, var(--surface2), var(--surface3)); display: flex; align-items: center; justify-content: center; font-size: 48px; }
-
-        .post-body { padding: 18px; }
-        .post-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .post-topic { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent); background: var(--accent-dim); padding: 4px 12px; border-radius: 20px; }
-
-        .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 10px; color: var(--text); letter-spacing: -0.3px; }
-        .post-summary { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-
-        .post-footer { padding: 14px 18px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-        .read-more { font-size: 14px; color: var(--accent); font-weight: 600; }
-        .post-date { font-size: 12px; color: var(--text-dim); }
-
-        /* ===== BOTTOM NAV ===== */
-        .bottom-nav {
-            height: var(--nav-h); display: flex;
-            border-top: 1px solid var(--border);
-            background: var(--bg); flex-shrink: 0;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .nav-item {
-            flex: 1; display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            gap: 4px; cursor: pointer; color: var(--text-muted);
-        }
+        /* NAV */
+        .bottom-nav { height: var(--nav-h); display: flex; border-top: 1px solid var(--border); background: var(--bg); padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--text-muted); }
         .nav-item.active { color: var(--accent); }
         .nav-item svg { width: 28px; height: 28px; stroke-width: 2.2; }
-        .nav-item span { font-size: 11px; font-weight: 600; letter-spacing: 0.3px; margin-top: 2px; }
+        .nav-item span { font-size: 11px; font-weight: 600; }
 
-        /* ===== SETTINGS ===== */
+        /* SETTINGS MENU */
         .settings-menu { padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
-        .menu-item {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 18px 20px;
-            display: flex; align-items: center; gap: 16px; cursor: pointer;
-        }
-        .menu-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--accent-dim); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--accent); }
-        .menu-text { flex: 1; }
+        .menu-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; display: flex; align-items: center; gap: 16px; }
+        .menu-icon { font-size: 20px; }
         .menu-title { font-size: 16px; font-weight: 600; }
-        .menu-sub { font-size: 13px; color: var(--text-muted); }
 
-        /* Settings Sub-Pages */
-        .settings-content { flex: 1; overflow-y: auto; padding: 20px 16px; }
-        .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
-        .settings-row { padding: 16px 20px; border-bottom: 1px solid var(--border); }
-        .settings-label { display: block; font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .settings-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-family: inherit; font-size: 14px; outline: none; }
+        /* CHAT FAB - FIXED IN BOTTOM RIGHT */
+        .chat-fab { 
+            position: fixed; 
+            bottom: calc(var(--nav-h) + 20px); 
+            right: 20px; 
+            width: 56px; 
+            height: 56px; 
+            background: var(--accent); 
+            border-radius: 50%; 
+            display: none; /* Controlled by JS */
+            align-items: center; 
+            justify-content: center; 
+            z-index: 90; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+            transition: transform 0.2s;
+        }
+        .chat-fab:active { transform: scale(0.9); }
+        .chat-fab svg { width: 26px; height: 26px; fill: white; }
 
-        /* Theme Grid */
-        .theme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 12px; padding: 20px; }
-        .theme-swatch { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
-        .theme-circle { width: 50px; height: 50px; border-radius: 50%; border: 3px solid transparent; position: relative; overflow: hidden; }
-        .theme-circle.selected { border-color: var(--text); }
-        .theme-circle::before { content: ''; position: absolute; inset: 0; }
-        .theme-warm .theme-circle::before { background: linear-gradient(135deg, #191919 50%, #c8824a 50%); }
-        .theme-slate .theme-circle::before { background: linear-gradient(135deg, #191919 50%, #6b9fe4 50%); }
-        .theme-forest .theme-circle::before { background: linear-gradient(135deg, #191919 50%, #6ab870 50%); }
-        .theme-rose .theme-circle::before { background: linear-gradient(135deg, #191919 50%, #c96882 50%); }
-        .theme-light .theme-circle::before { background: linear-gradient(135deg, #f7f7f5 50%, #b07040 50%); }
+        /* CHAT SCREEN */
+        #chatScreen { z-index: 200; border-radius: 24px 24px 0 0; transform: translateY(100%); top: 10%; }
+        #chatScreen.active { transform: translateY(0); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        .msg { max-width: 80%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; }
+        .msg.ai { align-self: flex-start; background: var(--surface); border-bottom-left-radius: 4px; }
+        .msg.user { align-self: flex-end; background: var(--accent); color: white; border-bottom-right-radius: 4px; }
 
-        /* Loading Spinner */
-        .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 40px; }
-        .spinner { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; opacity: 0.7; }
+        .spinner { width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Overlay */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 150; display: none; }
-        .overlay.visible { display: block; }
-        
-        .chat-fab { position: fixed; bottom: 85px; right: 20px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-        .chat-fab.visible { display: flex; }
-        .chat-fab svg { width: 28px; height: 28px; fill: white; }
-
     </style>
 </head>
 <body class="theme-warm">
@@ -309,20 +122,16 @@
 
     <!-- ===== SETUP SCREEN ===== -->
     <div class="screen" id="setupScreen">
-        <div style="text-align:center; margin-bottom: 8px;">
-            <div class="setup-logo">Learn<span>.</span></div>
-            <p class="setup-tagline">Your personal knowledge feed</p>
+        <div style="text-align:center; margin-bottom: 20px;">
+            <div class="header-title" style="font-size: 40px;">Learn<span>.</span></div>
+            <p style="opacity:0.6;">Connect your Notion workspace</p>
         </div>
         <div class="setup-card">
             <span class="setup-label">Notion Token</span>
-            <input class="setup-input" type="password" id="setupNotionKey" placeholder="secret_xxxxxx"/>
-        </div>
-        <div class="setup-card">
+            <input class="setup-input" type="password" id="setupNotionKey" placeholder="secret_xxxx"/>
             <span class="setup-label">Database ID</span>
-            <input class="setup-input" type="text" id="setupDbId" placeholder="32 characters..."/>
-        </div>
-        <div class="setup-card">
-            <span class="setup-label">Gemini API Key (Optional)</span>
+            <input class="setup-input" type="text" id="setupDbId" placeholder="32 chars"/>
+            <span class="setup-label">Gemini API Key</span>
             <input class="setup-input" type="password" id="setupGeminiKey" placeholder="AIzaSy..."/>
         </div>
         <button class="primary-btn" onclick="saveSetup()">Start Learning →</button>
@@ -332,110 +141,82 @@
     <div class="screen active" id="mainScreen">
         <div class="header">
             <div class="header-title" id="mainHeaderTitle">Learn<span>.</span></div>
-            <div class="icon-btn" onclick="refreshFeed()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-            </div>
-            <div class="icon-btn" onclick="showSettingsMenu()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
+            <div class="icon-btn" onclick="refreshFeed()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+            <div class="icon-btn" onclick="showSettingsMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         </div>
-
-        <div class="filter-bar" id="filterBar">
-            <div class="filter-chip active" data-topic="All" onclick="filterTopic(this)">All</div>
-        </div>
-
-        <div class="feed" id="feed">
-            <div class="loading"><p>Please set up your credentials in Settings.</p></div>
-        </div>
-
+        <div class="filter-bar" id="filterBar"><div class="filter-chip active" data-topic="All" onclick="filterTopic(this)">All</div></div>
+        <div class="feed" id="feed"></div>
         <div class="bottom-nav">
-            <div class="nav-item active" id="nav-feed" onclick="showTab('feed')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span>Home</span>
-            </div>
-            <div class="nav-item" id="nav-bookmarks" onclick="showTab('bookmarks')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-                <span>Saved</span>
-            </div>
+            <div class="nav-item active" id="nav-feed" onclick="showTab('feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+            <div class="nav-item" id="nav-bookmarks" onclick="showTab('bookmarks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg><span>Saved</span></div>
         </div>
     </div>
 
-    <!-- ===== SETTINGS MENU ===== -->
+    <!-- SETTINGS SCREEN -->
     <div class="screen" id="settingsMenuScreen">
-        <div class="header">
-            <div class="back-btn" onclick="goBack()">
-                <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back
-            </div>
-            <div class="header-title" style="text-align:right;">Settings</div>
-        </div>
+        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div class="settings-menu">
-            <div class="menu-item" onclick="showScreen('settingsAppearanceScreen')">
-                <div class="menu-icon">🎨</div>
-                <div class="menu-text"><div class="menu-title">Appearance</div><div class="menu-sub">Themes and colors</div></div>
-                <div style="color:var(--text-dim);">›</div>
-            </div>
-            <div class="menu-item" onclick="showScreen('settingsCredentialsScreen')">
-                <div class="menu-icon">🔑</div>
-                <div class="menu-text"><div class="menu-title">Credentials</div><div class="menu-sub">Notion and Gemini keys</div></div>
-                <div style="color:var(--text-dim);">›</div>
-            </div>
-            <div class="menu-item" onclick="showScreen('settingsDataScreen')">
-                <div class="menu-icon">💾</div>
-                <div class="menu-text"><div class="menu-title">Data & Sync</div><div class="menu-sub">Refresh or reset app</div></div>
-                <div style="color:var(--text-dim);">›</div>
-            </div>
+            <div class="menu-item" onclick="showScreen('settingsAppearanceScreen')"><div class="menu-icon">🎨</div><div class="menu-text"><div class="menu-title">Appearance</div></div></div>
+            <div class="menu-item" onclick="showScreen('settingsCredentialsScreen')"><div class="menu-icon">🔑</div><div class="menu-text"><div class="menu-title">Credentials</div></div></div>
+            <div class="menu-item" onclick="clearAllData()" style="color:var(--danger);"><div class="menu-icon">🗑️</div><div class="menu-text"><div class="menu-title">Reset App</div></div></div>
         </div>
     </div>
 
-    <!-- Sub Settings Screens -->
+    <!-- SETTINGS: APPEARANCE -->
     <div class="screen" id="settingsAppearanceScreen">
-        <div class="header"><div class="back-btn" onclick="goBackToSettingsMenu()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
+        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div class="theme-grid">
-            <div class="theme-swatch" onclick="setTheme('warm')"><div class="theme-circle theme-warm" id="swatch-warm"></div><span class="theme-name">Warm</span></div>
-            <div class="theme-swatch" onclick="setTheme('slate')"><div class="theme-circle theme-slate" id="swatch-slate"></div><span class="theme-name">Slate</span></div>
-            <div class="theme-swatch" onclick="setTheme('forest')"><div class="theme-circle theme-forest" id="swatch-forest"></div><span class="theme-name">Forest</span></div>
-            <div class="theme-swatch" onclick="setTheme('rose')"><div class="theme-circle theme-rose" id="swatch-rose"></div><span class="theme-name">Rose</span></div>
-            <div class="theme-swatch" onclick="setTheme('light')"><div class="theme-circle theme-light" id="swatch-light"></div><span class="theme-name">Light</span></div>
+            <div class="theme-swatch" onclick="setTheme('warm')"><div class="theme-circle theme-warm" id="swatch-warm"></div><span>Warm</span></div>
+            <div class="theme-swatch" onclick="setTheme('slate')"><div class="theme-circle theme-slate" id="swatch-slate"></div><span>Slate</span></div>
+            <div class="theme-swatch" onclick="setTheme('forest')"><div class="theme-circle theme-forest" id="swatch-forest"></div><span>Forest</span></div>
+            <div class="theme-swatch" onclick="setTheme('rose')"><div class="theme-circle theme-rose" id="swatch-rose"></div><span>Rose</span></div>
+            <div class="theme-swatch" onclick="setTheme('light')"><div class="theme-circle theme-light" id="swatch-light"></div><span>Light</span></div>
         </div>
     </div>
 
+    <!-- SETTINGS: CREDENTIALS -->
     <div class="screen" id="settingsCredentialsScreen">
-        <div class="header"><div class="back-btn" onclick="goBackToSettingsMenu()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
-        <div class="settings-content">
-            <div class="settings-card">
-                <div class="settings-row"><span class="settings-label">Notion Token</span><input class="settings-input" type="password" id="settingsNotionKey"/></div>
-                <div class="settings-row"><span class="settings-label">Database ID</span><input class="settings-input" type="text" id="settingsDbId"/></div>
-                <div class="settings-row"><span class="settings-label">Gemini API Key</span><input class="settings-input" type="password" id="settingsGeminiKey"/></div>
+        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
+        <div style="padding:20px;">
+            <div class="setup-card">
+                <span class="setup-label">Notion Token</span><input class="setup-input" type="password" id="setNotionKey"/>
+                <span class="setup-label">Database ID</span><input class="setup-input" type="text" id="setDbId"/>
+                <span class="setup-label">Gemini API Key</span><input class="setup-input" type="password" id="setGeminiKey"/>
             </div>
-            <button class="primary-btn" onclick="saveSettings()">Save Changes</button>
+            <button class="primary-btn" onclick="saveUpdatedSettings()">Save Changes</button>
         </div>
     </div>
 
-    <div class="screen" id="settingsDataScreen">
-        <div class="header"><div class="back-btn" onclick="goBackToSettingsMenu()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
-        <div class="settings-content">
-            <div class="menu-item" onclick="refreshFeed(); goBackToMain();"><div class="menu-icon">🔄</div><div class="menu-text"><div class="menu-title">Refresh Feed</div><div class="menu-sub">Sync from Notion</div></div></div>
-            <div style="margin-top:20px;"></div>
-            <div class="menu-item" onclick="clearAllData()" style="border-color:var(--danger)"><div class="menu-icon" style="background:rgba(184,85,85,0.1); color:var(--danger)">🗑️</div><div class="menu-text"><div class="menu-title" style="color:var(--danger)">Reset App</div><div class="menu-sub">Delete all local data</div></div></div>
-        </div>
-    </div>
-
-    <!-- ===== DETAIL SCREEN ===== -->
+    <!-- DETAIL SCREEN -->
     <div class="screen" id="detailScreen">
-        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div><div id="detailBookmarkBtn" style="margin-left:auto; cursor:pointer;" onclick="toggleDetailBookmark()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div></div>
-        <div id="detailScroll" style="flex:1; overflow-y:auto;"></div>
-        <div class="chat-fab visible" id="chatFab" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div class="header">
+            <div class="back-btn" onclick="closePost()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div>
+            <div id="detailBookmarkBtn" style="margin-left:auto; cursor:pointer;" onclick="toggleDetailBookmark()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+        </div>
+        <div id="detailScroll" style="flex:1; overflow-y:auto; padding-bottom: 100px;"></div>
+        
+        <!-- CHAT BUBBLE (Only visible here) -->
+        <div class="chat-fab" id="chatFab" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
     </div>
 
-    <!-- ===== CHAT SCREEN ===== -->
-    <div class="screen" id="chatScreen">
-        <div class="header" style="border-radius:24px 24px 0 0;"><div class="header-title">AI Tutor</div><button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:24px;">×</button></div>
-        <div id="chatMessages" style="flex:1; overflow-y:auto; padding:20px;"></div>
-        <div style="padding:16px; border-top:1px solid var(--border); background:var(--surface);"><div style="display:flex; gap:10px;"><input type="text" id="chatInput" class="settings-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendChatMessage()"/><button class="icon-btn" onclick="sendChatMessage()" style="background:var(--accent); color:white; border:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></div>
+    <!-- CHAT SCREEN -->
+    <div class="screen" id="chatScreen" style="background: var(--surface);">
+        <div class="header" style="background: var(--surface); border-radius: 20px 20px 0 0;">
+            <div class="header-title">AI Tutor</div>
+            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:24px; padding:10px;">×</button>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div style="padding:16px; background: var(--bg); border-top: 1px solid var(--border);">
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="chatInput" class="setup-input" style="margin-bottom:0;" placeholder="Ask about this post..." onkeydown="if(event.key==='Enter') sendChatMessage()"/>
+                <button class="icon-btn" onclick="sendChatMessage()" style="background:var(--accent); border:none; color:white;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+            </div>
+        </div>
     </div>
 
 <script>
     let allPosts = [];
+    let currentPost = null;
     let currentFilter = 'All';
     let currentView = 'feed';
     let screenStack = ['mainScreen'];
@@ -447,11 +228,8 @@
     };
 
     window.onload = () => {
-        const nk = store.get('notion_key');
-        const db = store.get('notion_db');
         applyTheme(store.get('theme') || 'warm');
-
-        if (!nk || !db) {
+        if (!store.get('notion_key')) {
             showScreen('setupScreen');
         } else {
             loadFeed();
@@ -473,65 +251,45 @@
         }
     }
 
-    function goBackToSettingsMenu() {
-        while(screenStack.length > 1 && screenStack[screenStack.length-1] !== 'settingsMenuScreen') screenStack.pop();
-        goBack(); // This goes to settings menu
-        showScreen('settingsMenuScreen');
-    }
-
-    function goBackToMain() {
-        screenStack = ['mainScreen'];
-        showScreen('mainScreen');
-    }
-
-    function showSettingsMenu() {
-        document.getElementById('settingsNotionKey').value = store.get('notion_key') || '';
-        document.getElementById('settingsDbId').value = store.get('notion_db') || '';
-        document.getElementById('settingsGeminiKey').value = store.get('gemini_key') || '';
-        showScreen('settingsMenuScreen');
-    }
-
     function saveSetup() {
         const nk = document.getElementById('setupNotionKey').value.trim();
         const db = document.getElementById('setupDbId').value.trim();
         const gk = document.getElementById('setupGeminiKey').value.trim();
-        if (!nk || !db) return alert('Token and Database ID are required.');
-        
-        store.set('notion_key', nk);
-        store.set('notion_db', db);
+        if (!nk || !db) return alert('Credentials required');
+        store.set('notion_key', nk); store.set('notion_db', db);
         if(gk) store.set('gemini_key', gk);
-        
-        goBackToMain();
-        loadFeed();
+        location.reload();
     }
 
-    function saveSettings() {
-        store.set('notion_key', document.getElementById('settingsNotionKey').value.trim());
-        store.set('notion_db', document.getElementById('settingsDbId').value.trim());
-        store.set('gemini_key', document.getElementById('settingsGeminiKey').value.trim());
-        alert('Saved successfully.');
-        goBackToSettingsMenu();
-        loadFeed();
+    function showSettingsMenu() {
+        document.getElementById('setNotionKey').value = store.get('notion_key') || '';
+        document.getElementById('setDbId').value = store.get('notion_db') || '';
+        document.getElementById('setGeminiKey').value = store.get('gemini_key') || '';
+        showScreen('settingsMenuScreen');
+    }
+
+    function saveUpdatedSettings() {
+        store.set('notion_key', document.getElementById('setNotionKey').value.trim());
+        store.set('notion_db', document.getElementById('setDbId').value.trim());
+        store.set('gemini_key', document.getElementById('setGeminiKey').value.trim());
+        alert('Saved');
+        location.reload();
     }
 
     async function loadFeed() {
         const feed = document.getElementById('feed');
-        feed.innerHTML = '<div class="loading"><div class="spinner"></div><p>Connecting to Notion...</p></div>';
-        
+        feed.innerHTML = '<div class="loading"><div class="spinner"></div><p>Syncing Notion...</p></div>';
         const key = store.get('notion_key');
         const db = store.get('notion_db');
-        if(!key || !db) return;
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
 
         try {
-            const res = await fetch(`https://api.notion.com/v1/databases/${db}/query`, {
+            const res = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
                 body: JSON.stringify({})
             });
             const data = await res.json();
-            
-            if (!res.ok) throw new Error(data.message || 'Notion API Error');
-
             allPosts = (data.results || []).map(p => {
                 const props = p.properties;
                 return {
@@ -546,7 +304,7 @@
             buildFilterBar();
             renderFeed();
         } catch (e) {
-            feed.innerHTML = `<div style="padding:20px; text-align:center;"><p>⚠️ ${e.message}</p><p style="font-size:12px; margin-top:10px; opacity:0.7;">Direct Notion API calls from browsers are often blocked by CORS. You may need a proxy or server to fix this.</p></div>`;
+            feed.innerHTML = '<p style="padding:40px; text-align:center;">Failed to connect to Notion.</p>';
         }
     }
 
@@ -556,19 +314,14 @@
         let posts = currentView === 'bookmarks' ? allPosts.filter(p => p.bookmarked) : allPosts;
         if (currentFilter !== 'All') posts = posts.filter(p => p.topic === currentFilter);
 
-        if (posts.length === 0) {
-            feed.innerHTML = '<div class="loading"><p>No posts found.</p></div>';
-            return;
-        }
-
         posts.forEach((p, i) => {
             const card = document.createElement('div');
             card.className = 'post-card';
             card.style.animationDelay = `${i * 0.05}s`;
             card.innerHTML = `
-                ${p.imageLink ? `<img src="${p.imageLink}" class="post-image">` : `<div class="post-image-placeholder">📖</div>`}
+                ${p.imageLink ? `<img src="${p.imageLink}" class="post-image">` : `<div style="height:100px; display:flex; align-items:center; justify-content:center; font-size:40px; background:var(--surface2);">📖</div>`}
                 <div class="post-body">
-                    <div class="post-meta"><span class="post-topic">${p.topic}</span></div>
+                    <span class="post-topic">${p.topic}</span>
                     <div class="post-title">${p.title}</div>
                     <div class="post-summary">${p.summary}</div>
                 </div>
@@ -576,12 +329,6 @@
             card.onclick = () => openPost(p);
             feed.appendChild(card);
         });
-    }
-
-    function buildFilterBar() {
-        const bar = document.getElementById('filterBar');
-        const topics = ['All', ...new Set(allPosts.map(p => p.topic))];
-        bar.innerHTML = topics.map(t => `<div class="filter-chip ${t===currentFilter?'active':''}" data-topic="${t}" onclick="filterTopic(this)">${t}</div>`).join('');
     }
 
     function showTab(tab) {
@@ -599,23 +346,92 @@
         renderFeed();
     }
 
+    function buildFilterBar() {
+        const bar = document.getElementById('filterBar');
+        const topics = ['All', ...new Set(allPosts.map(p => p.topic))];
+        bar.innerHTML = topics.map(t => `<div class="filter-chip ${t===currentFilter?'active':''}" data-topic="${t}" onclick="filterTopic(this)">${t}</div>`).join('');
+    }
+
     function openPost(p) {
+        currentPost = p;
         const detail = document.getElementById('detailScroll');
-        detail.innerHTML = `<div style="padding:20px;"><h1 style="font-family:'Playfair Display'; margin-bottom:15px;">${p.title}</h1><p style="color:var(--text-muted); line-height:1.8;">${p.summary}</p><div style="margin-top:30px; padding:20px; background:var(--surface); border-radius:12px;"><h3>Full Content</h3><p style="margin-top:10px; opacity:0.8;">To show the full Notion page content, you would need to fetch the blocks for this page ID (${p.id}).</p></div></div>`;
+        detail.innerHTML = `
+            <div style="padding:20px;">
+                ${p.imageLink ? `<img src="${p.imageLink}" style="width:100%; border-radius:12px; margin-bottom:20px;">` : ''}
+                <span class="post-topic">${p.topic}</span>
+                <h1 style="font-family:'Playfair Display'; font-size:28px; margin:10px 0;">${p.title}</h1>
+                <div style="height:2px; width:40px; background:var(--accent); margin-bottom:20px;"></div>
+                <p style="color:var(--text-muted); line-height:1.8; font-size:16px;">${p.summary}</p>
+                <div style="margin-top:30px; padding:20px; background:var(--surface); border-radius:12px; border-left: 4px solid var(--accent);">
+                    <h3 style="margin-bottom:10px;">Deep Dive</h3>
+                    <p style="opacity:0.8;">Use the AI Tutor bubble in the corner to ask specific questions about this topic!</p>
+                </div>
+            </div>
+        `;
         document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = p.bookmarked ? 'var(--accent)' : 'none';
+        document.getElementById('chatFab').style.display = 'flex'; // Show Chat Bubble
         showScreen('detailScreen');
+    }
+
+    function closePost() {
+        document.getElementById('chatFab').style.display = 'none'; // Hide Chat Bubble
+        goBack();
+    }
+
+    function openChat() {
+        document.getElementById('chatScreen').classList.add('active');
+        document.getElementById('overlay').classList.add('visible');
+        if (document.getElementById('chatMessages').children.length === 0) {
+            addChatMsg('ai', `Hi! I'm your AI Tutor. I've read about "${currentPost.title}". What would you like to know more about?`);
+        }
+    }
+
+    function closeChat() {
+        document.getElementById('chatScreen').classList.remove('active');
+        document.getElementById('overlay').classList.remove('visible');
+    }
+
+    async function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        const apiKey = store.get('gemini_key');
+        if (!text) return;
+        if (!apiKey) return alert('Please add Gemini API key in Settings.');
+
+        addChatMsg('user', text);
+        input.value = '';
+
+        const context = `You are a helpful AI tutor. The user is reading a post titled "${currentPost.title}" which is about "${currentPost.topic}". The summary is: "${currentPost.summary}". Please answer their questions specifically based on this context.`;
+        
+        try {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: context + "\n\nUser Question: " + text }] }] })
+            });
+            const data = await res.json();
+            const reply = data.candidates[0].content.parts[0].text;
+            addChatMsg('ai', reply);
+        } catch (e) {
+            addChatMsg('ai', 'Sorry, I had trouble connecting to the AI brain.');
+        }
+    }
+
+    function addChatMsg(role, text) {
+        const chat = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = `msg ${role}`;
+        div.innerText = text;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
     }
 
     function applyTheme(name) {
         document.body.className = `theme-${name}`;
-        document.querySelectorAll('.theme-circle').forEach(c => c.classList.remove('selected'));
-        document.getElementById(`swatch-${name}`)?.classList.add('selected');
         store.set('theme', name);
     }
     function setTheme(n) { applyTheme(n); }
-    function openChat() { document.getElementById('chatScreen').classList.add('active'); document.getElementById('overlay').classList.add('visible'); }
-    function closeChat() { document.getElementById('chatScreen').classList.remove('active'); document.getElementById('overlay').classList.remove('visible'); }
-    function clearAllData() { if(confirm('Delete everything?')) { localStorage.clear(); location.reload(); } }
+    function clearAllData() { if(confirm('Reset app?')) { localStorage.clear(); location.reload(); } }
     function refreshFeed() { loadFeed(); }
 </script>
 </body>
