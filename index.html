@@ -99,9 +99,8 @@
             border-radius: var(--radius); 
             padding: 40px 32px;
             width: 100%;
-            aspect-ratio: 1 / 1;
-            /* Safari Fallback */
-            min-height: calc(100vw - 40px);
+            /* FIX: Removed aspect-ratio and fixed height to allow adaptive sizing */
+            min-height: 300px;
             height: auto;
             display: flex;
             flex-direction: column;
@@ -113,6 +112,7 @@
             animation: cardIn 0.5s ease forwards; 
             opacity: 0; 
             box-sizing: border-box;
+            overflow: visible; /* Ensure content is visible */
         }
         .post-card:active { transform: scale(0.97); background: var(--surface2); }
         
@@ -236,7 +236,6 @@
 
     <div class="overlay" id="overlay" onclick="closeChat()"></div>
 
-    <!-- SETUP SCREEN -->
     <div class="screen" id="setupScreen">
         <div style="text-align:center; margin-bottom: 24px;"><div class="header-title" style="font-size: 48px;">Learn<span>.</span></div></div>
         <div class="setup-card">
@@ -247,7 +246,6 @@
         <button class="primary-btn" onclick="saveSetup()">Start Learning →</button>
     </div>
 
-    <!-- MAIN SCREEN -->
     <div class="screen" id="mainScreen">
         <div class="header">
             <div class="header-title" id="mainHeaderTitle">Learn<span>.</span></div>
@@ -265,7 +263,6 @@
         </div>
     </div>
 
-    <!-- SETTINGS SCREEN -->
     <div class="screen" id="settingsMenuScreen">
         <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div class="settings-menu">
@@ -275,7 +272,6 @@
         </div>
     </div>
 
-    <!-- APPEARANCE SCREEN -->
     <div class="screen" id="settingsAppearanceScreen">
         <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div class="theme-grid">
@@ -287,7 +283,6 @@
         </div>
     </div>
 
-    <!-- CREDENTIALS SCREEN -->
     <div class="screen" id="settingsCredentialsScreen">
         <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
         <div style="padding:24px;">
@@ -300,7 +295,6 @@
         </div>
     </div>
 
-    <!-- DETAIL SCREEN -->
     <div class="screen" id="detailScreen">
         <div class="header">
             <div class="back-btn" onclick="closePost()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div>
@@ -310,7 +304,6 @@
         <div class="chat-fab" id="chatFab" onclick="openChat()"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
     </div>
 
-    <!-- CHAT SCREEN -->
     <div id="chatScreen">
         <div class="header">
             <div class="header-title">AI Tutor</div>
@@ -400,7 +393,6 @@
             const data = await res.json();
             allPosts = (data.results || []).map(p => {
                 const props = p.properties;
-
                 const getRichText = (prop) => {
                     if (!prop) return '';
                     if (prop.type === 'title') return (prop.title || []).map(t => t.plain_text).join('');
@@ -417,15 +409,9 @@
                     summary: getRichText(props['Summary']),
                     topic: getSelect(props['Topic']),
                     imageLink: getUrl(props['Image Link']),
-                    fullExplanation: getRichText(
-                        props['Full Explaination'] || props['Full Explanation']
-                    ),
+                    fullExplanation: getRichText(props['Full Explaination'] || props['Full Explanation']),
                     takeaway: getRichText(props['Takeaway']),
-                    youtubeLink: getUrl(
-                        props['YouTube Link'] ||
-                        props['Youtube Link'] ||
-                        props['YouTube link']
-                    ),
+                    youtubeLink: getUrl(props['YouTube Link'] || props['Youtube Link'] || props['YouTube link']),
                     article1: getUrl(props['Article Link 1']),
                     article2: getUrl(props['Article Link 2']),
                     bookmarked: getCheckbox(props['Bookmarked'])
@@ -491,23 +477,11 @@
         const takeaways = p.takeaway ? p.takeaway.split('\n').filter(t=>t.trim()).map(t => `<li class="takeaway-item">${t.replace(/^[-•*]\s*/, '')}</li>`).join('') : '';
         const getEmbedUrl = (url) => {
             if (!url) return '';
-            return url
-                .replace('watch?v=', 'embed/')
-                .replace('youtu.be/', 'youtube.com/embed/');
+            return url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
         };
 
         const videoEmbed = p.youtubeLink
-            ? `<div style="margin-top:40px; margin-bottom:20px;">
-                <iframe 
-                    width="100%" 
-                    height="220" 
-                    src="${getEmbedUrl(p.youtubeLink)}" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen
-                    style="border-radius:14px; display:block; width:100%;">
-                </iframe>
-              </div>`
+            ? `<div style="margin-top:40px; margin-bottom:20px;"><iframe width="100%" height="220" src="${getEmbedUrl(p.youtubeLink)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:14px; display:block; width:100%;"></iframe></div>`
             : '';
 
         const links = [
@@ -564,8 +538,8 @@
         input.value = '';
         const context = `Post Content: ${currentPost.title}\nTopic: ${currentPost.topic}\nSummary: ${currentPost.summary}\nExplanation: ${currentPost.fullExplanation}`;
         try {
-            // Updated to v1beta for gemini-1.5-flash
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            // FIX: Endpoint updated to gemini-2.5-flash for free-tier compatibility
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: "Context: " + context + "\n\nQuestion: " + text }] }] })
             });
