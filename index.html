@@ -307,7 +307,7 @@
     </div>
 
     <!-- CHAT SCREEN -->
-    <div class="screen" id="chatScreen">
+    <div id="chatScreen">
         <div class="header">
             <div class="header-title">AI Tutor</div>
             <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:34px; padding:10px; cursor:pointer; line-height:1;">×</button>
@@ -385,7 +385,7 @@
         feed.innerHTML = '<div class="loading"><div class="spinner"></div><p>Syncing Notion...</p></div>';
         const key = store.get('notion_key');
         const db = store.get('notion_db');
-        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
 
         try {
             const res = await fetch(proxyUrl, {
@@ -543,6 +543,7 @@
         if (document.getElementById('chatMessages').children.length === 0) {
             addChatMsg('ai', `I'm here to help you understand "${currentPost.title}" better. Ask me any questions you have!`);
         }
+        setTimeout(() => document.getElementById('chatInput').focus(), 400);
     }
 
     function closeChat() { 
