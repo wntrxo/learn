@@ -58,6 +58,8 @@
             overflow: hidden;
         }
         .screen.active { transform: translateX(0); }
+        #chatScreen.active { transform: translateY(0) !important; }
+        #chatScreen:not(.active) { transform: translateY(100%) !important; }
 
         .header { height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; padding-top: env(safe-area-inset-top); }
         .header-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; flex: 1; }
@@ -152,23 +154,23 @@
 
         /* CHAT SCREEN */
         #chatScreen { 
-            position: fixed;
+            position: fixed !important;
+            top: 10% !important;
             left: 0;
             right: 0;
             bottom: 0;
-            top: 10%;
+            transform: translateY(100%) !important;
             z-index: 200; 
             border-radius: 30px 30px 0 0; 
-            transform: translateY(100%); 
             background: var(--surface); 
-            display: flex; 
+            display: flex !important; 
             flex-direction: column; 
             visibility: hidden;
             opacity: 0;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, visibility 0.3s;
         }
         #chatScreen.active { 
-            transform: translateY(0); 
+            transform: translateY(0) !important; 
             visibility: visible;
             opacity: 1;
         }
@@ -542,7 +544,8 @@
     }
 
     function openChat() {
-        document.getElementById('chatScreen').classList.add('active');
+        const chat = document.getElementById('chatScreen');
+        chat.classList.add('active');
         document.getElementById('overlay').classList.add('visible');
         if (document.getElementById('chatMessages').children.length === 0) {
             addChatMsg('ai', `I'm here to help you understand "${currentPost.title}" better. Ask me any questions you have!`);
