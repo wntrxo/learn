@@ -18,239 +18,462 @@
             --surface3: #2f2f2f;
             --border: rgba(255,255,255,0.06);
             --accent: #c8824a;
+            --accent-dim: rgba(200,130,74,0.15);
             --text: #e8e8e6;
             --text-muted: #6b6b6b;
             --danger: #b85555;
             --radius: 20px;
-            --header-h: 70px;
+            --nav-h: 75px;
+            --header-h: 60px;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        html, body { height: 100dvh; width: 100%; position: fixed; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+        .theme-warm { --bg: #191919; --surface: #202020; --accent: #c8824a; }
+        .theme-slate { --bg: #14161a; --surface: #1c1f26; --accent: #6b9fe4; }
+        .theme-forest { --bg: #141a16; --surface: #1c261f; --accent: #6ab870; }
+        .theme-rose { --bg: #1a1416; --surface: #261c1f; --accent: #c96882; }
+        .theme-light { --bg: #f7f7f5; --surface: #ffffff; --accent: #b07040; --text: #1a1a1a; --text-muted: #888; --border: rgba(0,0,0,0.08); }
 
-        .screen { position: fixed; inset: 0; height: 100dvh; display: flex; flex-direction: column; background: var(--bg); transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; overflow: hidden; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body { 
+            height: 100dvh; 
+            width: 100%;
+            position: fixed;
+            overflow: hidden; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'DM Sans', sans-serif; 
+            -webkit-font-smoothing: antialiased; 
+        }
+
+        .screen { 
+            position: fixed; 
+            inset: 0; 
+            height: 100dvh;
+            display: flex; 
+            flex-direction: column; 
+            background: var(--bg); 
+            transform: translateX(100%); 
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); 
+            z-index: 10; 
+            overflow: hidden;
+        }
         .screen.active { transform: translateX(0); }
 
-        .header { height: var(--header-h); display: flex; align-items: center; padding: env(safe-area-inset-top) 20px 0; gap: 14px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
+        .header { height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; padding-top: env(safe-area-inset-top); }
         .header-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; flex: 1; }
         .header-title span { color: var(--accent); }
 
-        .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .icon-btn:active { transform: scale(0.92); background: var(--surface2); }
-        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 16px; font-weight: 600; cursor: pointer; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .icon-btn:active { transform: scale(0.9); }
+
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 15px; font-weight: 600; cursor: pointer; }
+        .back-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 2.5; }
 
         #setupScreen { transform: translateX(0); justify-content: center; padding: 40px 28px; z-index: 100; display: none; }
         #setupScreen.active { display: flex; }
         .setup-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
-        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 14px; font-size: 16px; outline: none; margin-bottom: 12px; transition: 0.2s; }
-        .setup-input:focus { border-color: var(--accent); }
-        .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(200, 130, 74, 0.2); transition: 0.2s; }
-        .primary-btn:active { transform: scale(0.98); opacity: 0.9; }
+        .setup-label { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 12px; font-size: 14px; outline: none; margin-bottom: 12px; }
+        .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; }
 
-        .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
+        .filter-bar { padding: 12px 0 12px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); font-size: 13px; white-space: nowrap; }
+        .filter-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+        .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 24px; scrollbar-width: none; }
+        .feed::-webkit-scrollbar { display: none; }
         
         .post-card { 
             background: var(--surface); 
             border: 1px solid var(--border); 
             border-radius: var(--radius); 
-            padding: 24px; 
+            padding: 40px 32px; 
+            width: 100%; 
+            max-width: 500px;
             min-height: auto; 
-            height: auto;
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            align-items: center;
-            text-align: center;
+            align-items: center; 
+            text-align: center; 
             cursor: pointer; 
-            transition: 0.2s; 
-            width: 100%;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            animation: cardIn 0.5s ease forwards; 
+            opacity: 0; 
+            box-sizing: border-box; 
         }
         .post-card:active { transform: scale(0.97); background: var(--surface2); }
-        .post-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; margin-bottom: 10px; line-height: 1.25; }
-        .post-summary { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+        
+        .post-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text); }
+        .post-summary { font-size: 16px; color: var(--text-muted); line-height: 1.6; }
 
+        .detail-header-img { width: 100%; height: 260px; object-fit: cover; background: var(--surface2); }
         .detail-body { padding: 24px 20px 140px; }
         .section-label { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin: 36px 0 16px; display: block; }
         
         .rich-text strong { font-weight: 700; color: var(--text); }
 
-        .chat-fab { position: fixed; bottom: 30px; right: 20px; width: 64px; height: 64px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
+        .takeaway-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .takeaway-item { background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 14px; font-size: 15px; border-left: 5px solid var(--accent); line-height: 1.5; }
+        
+        .link-btn { display: flex; align-items: center; gap: 12px; background: var(--surface); padding: 16px; border-radius: 14px; text-decoration: none; color: var(--text); font-weight: 600; margin-bottom: 10px; border: 1px solid var(--border); font-size: 15px; }
+
+        .chat-fab { position: fixed; bottom: calc(var(--nav-h) + 20px); right: 20px; width: 64px; height: 64px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
         .chat-fab.visible { display: flex; }
-        #chatScreen { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: none; flex-direction: column; }
-        #chatScreen.active { display: flex; }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
-        .msg.ai { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
-        .msg.user { align-self: flex-end; background: var(--accent); color: white; }
+        .chat-fab:active { transform: scale(0.85); }
+
+        #chatScreen { position: fixed; top: 10%; left: 0; right: 0; bottom: 0; z-index: 200; border-radius: 30px 30px 0 0; transform: translateY(100%); background: var(--surface); display: flex; flex-direction: column; visibility: hidden; opacity: 0; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s; }
+        #chatScreen.active { transform: translateY(0); visibility: visible; opacity: 1; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .msg { max-width: 85%; padding: 14px 20px; border-radius: 22px; font-size: 15px; line-height: 1.5; }
+        .msg.ai { align-self: flex-start; background: var(--bg); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+        .msg.user { align-self: flex-end; background: var(--accent); color: white; border-bottom-right-radius: 4px; }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 150; backdrop-filter: blur(4px); }
+        .overlay.visible { opacity: 1; pointer-events: auto; }
+
+        .bottom-nav { height: calc(44px + env(safe-area-inset-bottom)); display: flex; border-top: 1px solid var(--border); background: var(--bg); padding-bottom: env(safe-area-inset-bottom); }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: var(--text-muted); }
+        .nav-item.active { color: var(--accent); }
+        .nav-item svg { width: 22px; height: 22px; }
+        .nav-item span { font-size: 9px; font-weight: 700; }
+
+        @keyframes cardIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .loading { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px; opacity: 0.6; }
+        .spinner { width: 36px; height: 36px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="theme-warm">
 
+    <div class="overlay" id="overlay" onclick="closeChat()"></div>
+
     <div class="screen" id="setupScreen">
-        <div style="text-align:center; margin-bottom: 24px;"><div class="header-title" style="font-size: 40px;">Learn<span>.</span></div></div>
+        <div style="text-align:center; margin-bottom: 24px;"><div class="header-title" style="font-size: 48px;">Learn<span>.</span></div></div>
         <div class="setup-card">
-            <input class="setup-input" type="password" id="setupNotionKey" placeholder="Notion Secret Key"/>
-            <input class="setup-input" type="text" id="setupDbId" placeholder="Database ID"/>
-            <input class="setup-input" type="password" id="setupGeminiKey" placeholder="Gemini API Key"/>
+            <span class="setup-label">Notion Token</span><input class="setup-input" type="password" id="setupNotionKey" placeholder="secret_xxxx"/>
+            <span class="setup-label">Database ID</span><input class="setup-input" type="text" id="setupDbId" placeholder="32 characters"/>
+            <span class="setup-label">Gemini API Key</span><input class="setup-input" type="password" id="setupGeminiKey" placeholder="AIzaSy..."/>
         </div>
-        <button class="primary-btn" onclick="saveSetup()">Connect Database</button>
+        <button class="primary-btn" onclick="saveSetup()">Start Learning →</button>
     </div>
 
     <div class="screen" id="mainScreen">
         <div class="header">
-            <div class="header-title">Learn<span>.</span></div>
-            <div class="icon-btn" onclick="loadFeed()">↻</div>
-            <div class="icon-btn" onclick="clearAllData()" style="margin-left: 10px;">✕</div>
+            <div class="header-title" id="mainHeaderTitle">Learn<span>.</span></div>
+            <div class="icon-btn" onclick="refreshFeed()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></div>
+            <div class="icon-btn" onclick="showSettingsMenu()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
         </div>
+        <div style="padding: 12px 16px 0 16px; flex-shrink: 0;">
+            <input type="text" id="searchInput" class="setup-input" style="margin-bottom:0; border-radius:14px; background:var(--surface);" placeholder="Search topics..." oninput="renderFeed()"/>
+        </div>
+        <div class="filter-bar" id="filterBar"></div>
         <div class="feed" id="feed"></div>
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-feed" onclick="showTab('feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></div>
+            <div class="nav-item" id="nav-bookmarks" onclick="showTab('bookmarks')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg><span>Saved</span></div>
+        </div>
     </div>
 
     <div class="screen" id="detailScreen">
         <div class="header">
-            <div class="back-btn" onclick="goBack()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-                Back
-            </div>
-            <div style="flex:1"></div>
-            <div class="icon-btn" id="detailBookmarkBtn" onclick="toggleDetailBookmark()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <div class="back-btn" onclick="closePost()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div>
+            <div style="margin-left:auto; display:flex; gap:16px; align-items:center;">
+                <div id="detailDeleteBtn" class="icon-btn" style="color:var(--danger); border:none; background:none;" onclick="deleteCurrentPost()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
+                <div id="detailBookmarkBtn" style="cursor:pointer;" onclick="toggleDetailBookmark()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
             </div>
         </div>
-        <div id="detailContent" style="flex:1; overflow-y:auto;"></div>
-        <div class="chat-fab" id="chatFab" onclick="toggleChat(true)">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        </div>
+        <div id="detailScroll" style="flex:1; overflow-y:auto;"></div>
+        <div class="chat-fab" id="chatFab" onclick="openChat()"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
     </div>
 
     <div id="chatScreen">
         <div class="header">
             <div class="header-title">AI Tutor</div>
-            <div class="back-btn" onclick="toggleChat(false)">Close</div>
+            <button onclick="closeChat()" style="background:none; border:none; color:var(--text); font-size:34px; padding:10px; cursor:pointer; line-height:1;">×</button>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
-        <div style="padding: 20px; padding-bottom: 40px; background: var(--bg);">
-            <input type="text" id="chatInput" class="setup-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendChat()"/>
+        <div style="padding:20px; background: var(--bg); border-top: 1px solid var(--border);">
+            <div style="display:flex; gap:12px;">
+                <input type="text" id="chatInput" class="setup-input" style="margin-bottom:0;" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChatMessage()"/>
+                <button class="icon-btn" onclick="sendChatMessage()" style="background:var(--accent); border:none; color:white; width:50px; height:50px; border-radius:15px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="screen" id="settingsMenuScreen">
+        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
+        <div style="padding: 20px;">
+            <div class="setup-card" style="cursor:pointer;" onclick="showScreen('settingsCredentialsScreen')"><span class="setup-label">Configuration</span><div style="font-weight:600;">Edit API Keys & IDs</div></div>
+            <div class="setup-card" style="cursor:pointer; border-color:var(--danger); color:var(--danger);" onclick="clearAllData()"><span class="setup-label" style="color:var(--danger);">Danger Zone</span><div style="font-weight:600;">Reset All Data</div></div>
+        </div>
+    </div>
+
+    <div class="screen" id="settingsCredentialsScreen">
+        <div class="header"><div class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div></div>
+        <div style="padding:24px;">
+            <div class="setup-card">
+                <span class="setup-label">Notion Token</span><input class="setup-input" type="password" id="setNotionKey"/>
+                <span class="setup-label">Database ID</span><input class="setup-input" type="text" id="setDbId"/>
+                <span class="setup-label">Gemini API Key</span><input class="setup-input" type="password" id="setGeminiKey"/>
+            </div>
+            <button class="primary-btn" onclick="saveUpdatedSettings()">Save Changes</button>
         </div>
     </div>
 
 <script>
     let allPosts = [];
     let currentPost = null;
+    let currentFilter = 'All';
+    let currentView = 'feed';
     let screenStack = ['mainScreen'];
-    const store = { get: k => localStorage.getItem(k), set: (k, v) => localStorage.setItem(k, v) };
+
+    const store = { get: k => localStorage.getItem(k), set: (k, v) => localStorage.setItem(k, v), del: k => localStorage.removeItem(k) };
 
     window.onload = () => {
-        if (!store.get('notion_key')) showScreen('setupScreen');
+        applyTheme(store.get('theme') || 'warm');
+        if (!store.get('notion_key')) { showScreen('setupScreen'); } 
         else { showScreen('mainScreen'); loadFeed(); }
     };
 
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+    function showScreen(id) { 
+        if (screenStack[screenStack.length-1] !== id) screenStack.push(id); 
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+        document.getElementById(id).classList.add('active'); 
     }
 
-    function goBack() {
-        screenStack.pop();
-        showScreen(screenStack[screenStack.length-1]);
-        if(screenStack[screenStack.length-1] === 'mainScreen') document.getElementById('chatFab').classList.remove('visible');
+    function goBack() { 
+        if (screenStack.length > 1) { 
+            screenStack.pop(); 
+            const prev = screenStack[screenStack.length-1]; 
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); 
+            document.getElementById(prev).classList.add('active'); 
+        } 
     }
 
     function saveSetup() {
-        store.set('notion_key', document.getElementById('setupNotionKey').value.trim());
-        store.set('notion_db', document.getElementById('setupDbId').value.trim());
-        store.set('gemini_key', document.getElementById('setupGeminiKey').value.trim());
+        const nk = document.getElementById('setupNotionKey').value.trim();
+        const db = document.getElementById('setupDbId').value.trim();
+        const gk = document.getElementById('setupGeminiKey').value.trim();
+        if (!nk || !db) return alert('Token and Database ID are required.');
+        store.set('notion_key', nk); store.set('notion_db', db);
+        if(gk) store.set('gemini_key', gk);
         location.reload();
     }
 
-    function formatMarkdown(text) {
+    function showSettingsMenu() {
+        document.getElementById('setNotionKey').value = store.get('notion_key') || '';
+        document.getElementById('setDbId').value = store.get('notion_db') || '';
+        document.getElementById('setGeminiKey').value = store.get('gemini_key') || '';
+        showScreen('settingsMenuScreen');
+    }
+
+    function saveUpdatedSettings() {
+        store.set('notion_key', document.getElementById('setNotionKey').value.trim());
+        store.set('notion_db', document.getElementById('setDbId').value.trim());
+        store.set('gemini_key', document.getElementById('setGeminiKey').value.trim());
+        alert('Credentials Saved');
+        location.reload();
+    }
+
+    function formatRichContent(text) {
         if (!text) return "";
         return text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>');
+            .replace(/\n/g, '<br/>');
     }
 
     async function loadFeed() {
         const feed = document.getElementById('feed');
-        feed.innerHTML = '<div style="text-align:center; padding-top:40px; opacity:0.5;">Loading feed...</div>';
-        
+        feed.innerHTML = '<div class="loading"><div class="spinner"></div><p>Syncing Notion...</p></div>';
         const key = store.get('notion_key');
         const db = store.get('notion_db');
         const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
-        
+
         try {
             const res = await fetch(proxyUrl, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' }
+                headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sorts: [{ property: "Date Added", direction: "descending" }] })
             });
             const data = await res.json();
-            allPosts = data.results.map(p => ({
-                id: p.id,
-                title: p.properties.Title?.title[0]?.plain_text || p.properties.Name?.title[0]?.plain_text || 'Untitled',
-                summary: p.properties.Summary?.rich_text[0]?.plain_text || '',
-                // UPDATED PROPERTY NAMES
-                full: (p.properties['Full Explaination Pt 1']?.rich_text[0]?.plain_text || '') + (p.properties['Full Explaination Pt 2']?.rich_text[0]?.plain_text || ''),
-                bookmarked: p.properties.Bookmarked?.checkbox || false
-            }));
+            allPosts = (data.results || []).map(p => {
+                const props = p.properties;
+                const getRichText = (propName) => {
+                    const prop = props[propName];
+                    if (!prop) return '';
+                    if (prop.type === 'title') return (prop.title || []).map(t => t.plain_text).join('');
+                    if (prop.type === 'rich_text') return (prop.rich_text || []).map(t => t.plain_text).join('');
+                    return '';
+                };
+                const getUrl = (propName) => props[propName] ? (props[propName].url || '') : '';
+                const getSelect = (propName) => props[propName] ? (props[propName].select?.name || '') : '';
+                const getCheckbox = (propName) => props[propName] ? (props[propName].checkbox || false) : false;
+
+                const part1 = getRichText('Full Explaination Pt 1');
+                const part2 = getRichText('Full Explaination Pt 2');
+
+                return {
+                    id: p.id,
+                    title: getRichText('Title') || getRichText('Name'),
+                    summary: getRichText('Summary'),
+                    topic: getSelect('Topic'),
+                    imageLink: getUrl('Image Link'),
+                    fullExplanation: (part1 + part2).trim(),
+                    takeaway: getRichText('Takeaway'),
+                    youtubeLink: getUrl('YouTube Link') || getUrl('Youtube Link'),
+                    article1: getUrl('Article Link 1'),
+                    article2: getUrl('Article Link 2'),
+                    bookmarked: getCheckbox('Bookmarked')
+                };
+            });
+            buildFilterBar();
             renderFeed();
-        } catch (e) { 
-            feed.innerHTML = '<div style="text-align:center; padding-top:40px; color:var(--danger);">Error syncing with Notion. Check keys.</div>';
+        } catch (e) {
+            feed.innerHTML = '<p style="padding:40px; text-align:center;">Could not load feed. Check Notion connection.</p>';
         }
     }
 
     function renderFeed() {
         const feed = document.getElementById('feed');
-        feed.innerHTML = allPosts.map(p => `
-            <div class="post-card" onclick="openPost('${p.id}')">
-                <div class="post-title">${p.title}</div>
-                <div class="post-summary">${p.summary}</div>
-            </div>
-        `).join('');
+        const query = (document.getElementById('searchInput').value || '').toLowerCase();
+        feed.innerHTML = '';
+        let posts = currentView === 'bookmarks' ? allPosts.filter(p => p.bookmarked) : allPosts;
+        if (currentFilter !== 'All') posts = posts.filter(p => p.topic === currentFilter);
+        if (query) posts = posts.filter(p => p.title.toLowerCase().includes(query) || p.summary.toLowerCase().includes(query));
+
+        if (posts.length === 0) {
+            feed.innerHTML = '<div class="loading"><p>No results found.</p></div>';
+            return;
+        }
+
+        posts.forEach((p, i) => {
+            const card = document.createElement('div');
+            card.className = 'post-card';
+            card.style.animationDelay = `${i * 0.08}s`;
+            card.innerHTML = `<div class="post-title">${p.title}</div><div class="post-summary">${p.summary}</div>`;
+            card.onclick = () => openPost(p);
+            feed.appendChild(card);
+        });
     }
 
-    function openPost(id) {
-        currentPost = allPosts.find(p => p.id === id);
-        const content = document.getElementById('detailContent');
-        content.innerHTML = `
+    function buildFilterBar() {
+        const bar = document.getElementById('filterBar');
+        const topics = ['All', ...new Set(allPosts.map(p => p.topic).filter(t => t))];
+        bar.innerHTML = topics.map(t => `<div class="filter-chip ${t===currentFilter?'active':''}" onclick="filterTopic('${t}')">${t}</div>`).join('');
+    }
+
+    function filterTopic(t) {
+        currentFilter = t;
+        buildFilterBar();
+        renderFeed();
+    }
+
+    function showTab(tab) {
+        currentView = tab;
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(`nav-${tab}`).classList.add('active');
+        document.getElementById('mainHeaderTitle').innerHTML = tab === 'feed' ? 'Learn<span>.</span>' : 'Saved<span>.</span>';
+        renderFeed();
+    }
+
+    function openPost(p) {
+        currentPost = p;
+        const detail = document.getElementById('detailScroll');
+        const takeaways = p.takeaway ? p.takeaway.split('\n').filter(t=>t.trim()).map(t => `<li class="takeaway-item">${t.replace(/^[-•*]\s*/, '')}</li>`).join('') : '';
+        const getEmbedUrl = (url) => { if (!url) return ''; return url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/'); };
+        const videoEmbed = p.youtubeLink ? `<div style="margin-top:40px; margin-bottom:20px;"><iframe width="100%" height="220" src="${getEmbedUrl(p.youtubeLink)}" frameborder="0" allowfullscreen style="border-radius:14px; width:100%;"></iframe></div>` : '';
+        const links = [p.article1 ? `<a href="${p.article1}" target="_blank" class="link-btn">📄 Source Article 1</a>` : '', p.article2 ? `<a href="${p.article2}" target="_blank" class="link-btn">📄 Source Article 2</a>` : ''].join('');
+
+        detail.innerHTML = `
+            ${p.imageLink ? `<img src="${p.imageLink}" class="detail-header-img">` : ''}
             <div class="detail-body">
-                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; line-height:1.1; margin-bottom:16px;">${currentPost.title}</h1>
-                <p style="color:var(--text-muted); font-size:17px; line-height:1.7; margin-bottom:30px;">${currentPost.summary}</p>
-                <span class="section-label">Deep Dive Analysis</span>
-                <div class="rich-text" style="line-height:1.8; color:var(--text-muted); font-size:16px;">
-                    ${formatMarkdown(currentPost.full)}
+                <span class="section-label" style="margin-top:0;">${p.topic || 'General'}</span>
+                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0;">${p.title}</h1>
+                <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${p.summary}</p>
+                ${takeaways ? `<span class="section-label">Key Takeaways</span><ul class="takeaway-list">${takeaways}</ul>` : ''}
+                ${videoEmbed}
+                <span class="section-label">Deep Dive</span>
+                <div class="rich-text" style="line-height:1.8; font-size:16px; color:var(--text-muted); margin-bottom:32px;">
+                  ${p.fullExplanation ? formatRichContent(p.fullExplanation) : 'Deep dive content loading...'}
                 </div>
+                ${links ? `<span class="section-label">Further Reading</span>${links}` : ''}
             </div>
         `;
-        document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = currentPost.bookmarked ? 'var(--accent)' : 'none';
+        document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = p.bookmarked ? 'var(--accent)' : 'none';
         document.getElementById('chatFab').classList.add('visible');
-        screenStack.push('detailScreen');
         showScreen('detailScreen');
     }
 
-    function toggleChat(show) {
-        document.getElementById('chatScreen').style.display = show ? 'flex' : 'none';
-        if (show) document.getElementById('chatScreen').classList.add('active');
+    async function deleteCurrentPost() {
+        if (!currentPost) return;
+        if (!confirm(`Are you sure you want to delete "${currentPost.title}" from your library and Notion?`)) return;
+
+        const key = store.get('notion_key');
+        const pageId = currentPost.id.replace(/-/g, '');
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
+
+        try {
+            const btn = document.getElementById('detailDeleteBtn');
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+
+            const res = await fetch(proxyUrl, {
+                method: 'PATCH',
+                headers: { 
+                    'Authorization': `Bearer ${key}`, 
+                    'Notion-Version': '2022-06-28', 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ archived: true })
+            });
+
+            if (res.ok) {
+                allPosts = allPosts.filter(p => p.id !== currentPost.id);
+                closePost();
+                renderFeed();
+            } else {
+                throw new Error('Notion API error');
+            }
+        } catch (e) {
+            alert('Error deleting from Notion. Please check your connection.');
+        } finally {
+            const btn = document.getElementById('detailDeleteBtn');
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+        }
     }
 
-    async function sendChat() {
+    function closePost() { document.getElementById('chatFab').classList.remove('visible'); document.getElementById('chatMessages').innerHTML = ''; goBack(); }
+
+    function openChat() {
+        document.getElementById('chatScreen').classList.add('active');
+        document.getElementById('overlay').classList.add('visible');
+        if (document.getElementById('chatMessages').children.length === 0) {
+            addChatMsg('ai', `I'm here to help you understand "${currentPost.title}" better. Ask me any questions you have!`);
+        }
+    }
+
+    function closeChat() { document.getElementById('chatScreen').classList.remove('active'); document.getElementById('overlay').classList.remove('visible'); }
+
+    async function sendChatMessage() {
         const input = document.getElementById('chatInput');
         const text = input.value.trim();
         const apiKey = store.get('gemini_key');
         if (!text || !apiKey) return;
-
         addChatMsg('user', text);
         input.value = '';
-
+        const context = `Post Content: ${currentPost.title}\nTopic: ${currentPost.topic}\nSummary: ${currentPost.summary}\nExplanation: ${currentPost.fullExplanation}`;
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Topic: ${currentPost.title}. Context: ${currentPost.full}. Question: ${text}` }] }] })
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: "Context: " + context + "\n\nQuestion: " + text }] }] })
             });
             const data = await res.json();
-            if (data.candidates && data.candidates[0].content.parts[0].text) {
+            if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
                 addChatMsg('ai', data.candidates[0].content.parts[0].text);
             } else {
-                addChatMsg('ai', 'AI Tutor is temporarily busy.');
+                addChatMsg('ai', 'AI Error or busy. Try again shortly.');
             }
         } catch (e) { addChatMsg('ai', 'Error connecting to AI Tutor.'); }
     }
@@ -264,13 +487,28 @@
         chat.scrollTop = chat.scrollHeight;
     }
 
+    function applyTheme(name) { document.body.className = `theme-${name}`; store.set('theme', name); }
+    function clearAllData() { if(confirm('Erase all data and reset?')) { localStorage.clear(); location.reload(); } }
+    function refreshFeed() { loadFeed(); }
+    
     async function toggleDetailBookmark() {
         if(!currentPost) return;
-        currentPost.bookmarked = !currentPost.bookmarked;
+        const key = store.get('notion_key');
+        const pageId = currentPost.id.replace(/-/g, '');
+        const newStatus = !currentPost.bookmarked;
+        
+        currentPost.bookmarked = newStatus;
         document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = currentPost.bookmarked ? 'var(--accent)' : 'none';
-    }
 
-    function clearAllData() { if(confirm('Erase all data and reset?')) { localStorage.clear(); location.reload(); } }
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
+        try {
+            await fetch(proxyUrl, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ properties: { 'Bookmarked': { checkbox: newStatus } } })
+            });
+        } catch (e) { console.error('Failed to sync bookmark to Notion'); }
+    }
 </script>
 </body>
 </html>
