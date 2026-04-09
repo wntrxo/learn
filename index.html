@@ -83,7 +83,7 @@
         .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 24px; scrollbar-width: none; }
         .feed::-webkit-scrollbar { display: none; }
         
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 32px; width: 100%; max-width: 500px; min-height: auto; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: cardIn 0.5s ease forwards; opacity: 0; box-sizing: border-box; }
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 32px; width: 100%;  display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: cardIn 0.5s ease forwards; opacity: 0; box-sizing: border-box; }
         .post-card:active { transform: scale(0.97); background: var(--surface2); }
         
         .post-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text); }
@@ -164,10 +164,7 @@
         <div class="header">
             <div class="back-btn" onclick="closePost()"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg> Back</div>
             <div style="margin-left:auto; display:flex; gap:16px; align-items:center;">
-                <div id="detailReadBtn" onclick="toggleRead()">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                    READ
-                </div>
+                <div id="detailReadBtn" onclick="toggleRead()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> READ</div>
                 <div id="detailDeleteBtn" class="icon-btn" style="color:var(--danger); border:none; background:none;" onclick="deleteCurrentPost()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></div>
                 <div id="detailBookmarkBtn" style="cursor:pointer;" onclick="toggleDetailBookmark()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
             </div>
@@ -386,8 +383,7 @@
             </div>
         `;
         document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = p.bookmarked ? 'var(--accent)' : 'none';
-        const readBtn = document.getElementById('detailReadBtn');
-        readBtn.classList.toggle('read', !!p.read);
+        document.getElementById('detailReadBtn').classList.toggle('read', !!p.read);
         document.getElementById('chatFab').classList.add('visible');
         showScreen('detailScreen');
     }
@@ -479,16 +475,9 @@
         const key = store.get('notion_key');
         const pageId = currentPost.id.replace(/-/g, '');
         const newStatus = !currentPost.read;
-
         currentPost.read = newStatus;
-        const readBtn = document.getElementById('detailReadBtn');
-        readBtn.classList.toggle('read', newStatus);
-
-        // Remove from feed immediately if marked as read
-        if (newStatus) {
-            allPosts = allPosts.map(p => p.id === currentPost.id ? { ...p, read: true } : p);
-        }
-
+        allPosts = allPosts.map(p => p.id === currentPost.id ? { ...p, read: newStatus } : p);
+        document.getElementById('detailReadBtn').classList.toggle('read', newStatus);
         const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
         try {
             await fetch(proxyUrl, {
@@ -498,7 +487,8 @@
             });
         } catch (e) { console.error('Failed to sync read status to Notion'); }
     }
- document.body.className = `theme-${name}`; store.set('theme', name); }
+
+    function applyTheme(name) { document.body.className = `theme-${name}`; store.set('theme', name); }
     function clearAllData() { if(confirm('Erase all data and reset?')) { localStorage.clear(); location.reload(); } }
     function refreshFeed() { loadFeed(); }
     
