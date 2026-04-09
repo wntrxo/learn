@@ -204,6 +204,7 @@
 
 <script>
     let allPosts = [];
+    const md = text => (text || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     let currentPost = null;
     let currentFilter = 'All';
     let currentView = 'feed';
@@ -325,7 +326,7 @@
             const card = document.createElement('div');
             card.className = 'post-card';
             card.style.animationDelay = `${i * 0.08}s`;
-            card.innerHTML = `<div class="post-title">${p.title}</div><div class="post-summary">${p.summary}</div>`;
+            card.innerHTML = `<div class="post-title">${md(p.title)}</div><div class="post-summary">${md(p.summary)}</div>`;
             card.onclick = () => openPost(p);
             feed.appendChild(card);
         });
@@ -363,13 +364,13 @@
             ${p.imageLink ? `<img src="${p.imageLink}" class="detail-header-img">` : ''}
             <div class="detail-body">
                 <span class="section-label" style="margin-top:0;">${p.topic || 'General'}</span>
-                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0;">${p.title}</h1>
-                <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${p.summary}</p>
+                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; margin:12px 0;">${md(p.title)}</h1>
+                <p style="color:var(--text-muted); font-size:17px; line-height:1.6; margin-bottom:40px;">${md(p.summary)}</p>
                 ${takeaways ? `<span class="section-label">Key Takeaways</span><ul class="takeaway-list">${takeaways}</ul>` : ''}
                 ${videoEmbed}
                 <span class="section-label">Deep Dive</span>
                 <div style="line-height:1.8; font-size:16px; color:var(--text-muted); margin-bottom:32px;">
-                  ${p.fullExplanation ? p.fullExplanation.replace(/\n/g, '<br/>') : 'Deep dive content loading...'}
+                  ${p.fullExplanation ? md(p.fullExplanation).replace(/\n/g, '<br/>') : 'Deep dive content loading...'}
                 </div>
                 ${links ? `<span class="section-label">Further Reading</span>${links}` : ''}
             </div>
