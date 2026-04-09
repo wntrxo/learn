@@ -80,10 +80,10 @@
         .filter-chip { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); font-size: 13px; white-space: nowrap; }
         .filter-chip.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
-        .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 24px; scrollbar-width: none; }
+        .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 24px; scrollbar-width: none; }
         .feed::-webkit-scrollbar { display: none; }
         
-        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 36px 28px; width: 100%; height: auto !important; min-height: 0 !important; display: block; text-align: center; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: cardIn 0.5s ease forwards; opacity: 0; box-sizing: border-box; overflow: visible; }
+        .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 32px; width: 100%; max-width: 500px; min-height: auto; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: cardIn 0.5s ease forwards; opacity: 0; box-sizing: border-box; }
         .post-card:active { transform: scale(0.97); background: var(--surface2); }
         
         .post-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text); }
