@@ -49,7 +49,6 @@
 
         .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
         
-        /* CARD UPDATES: Centered and Dynamic Height */
         .post-card { 
             background: var(--surface); 
             border: 1px solid var(--border); 
@@ -163,7 +162,6 @@
         location.reload();
     }
 
-    // Helper to format **bold** and line breaks
     function formatMarkdown(text) {
         if (!text) return "";
         return text
@@ -189,7 +187,8 @@
                 id: p.id,
                 title: p.properties.Title?.title[0]?.plain_text || p.properties.Name?.title[0]?.plain_text || 'Untitled',
                 summary: p.properties.Summary?.rich_text[0]?.plain_text || '',
-                full: (p.properties.full_explanation_pt1?.rich_text[0]?.plain_text || '') + (p.properties.full_explanation_pt2?.rich_text[0]?.plain_text || ''),
+                // UPDATED PROPERTY NAMES
+                full: (p.properties['Full Explaination Pt 1']?.rich_text[0]?.plain_text || '') + (p.properties['Full Explaination Pt 2']?.rich_text[0]?.plain_text || ''),
                 bookmarked: p.properties.Bookmarked?.checkbox || false
             }));
             renderFeed();
