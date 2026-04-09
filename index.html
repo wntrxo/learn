@@ -8,107 +8,78 @@
     <meta name="apple-mobile-web-app-title" content="Learn"/>
     <link rel="apple-touch-icon" href="https://via.placeholder.com/192x192/c8824a/ffffff?text=L">
     <title>Learn</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+    <link rel="manifest" href="manifest.json"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
     <style>
         :root {
             --bg: #191919;
             --surface: #202020;
             --surface2: #272727;
+            --surface3: #2f2f2f;
             --border: rgba(255,255,255,0.06);
             --accent: #c8824a;
             --text: #e8e8e6;
             --text-muted: #6b6b6b;
             --danger: #b85555;
             --radius: 20px;
-            --header-h: 75px;
+            --header-h: 70px;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        html, body { 
-            height: 100dvh; 
-            width: 100%; 
-            position: fixed; 
-            overflow: hidden; 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'DM Sans', sans-serif; 
-        }
+        html, body { height: 100dvh; width: 100%; position: fixed; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
 
-        .screen { 
-            position: fixed; 
-            inset: 0; 
-            height: 100dvh; 
-            display: flex; 
-            flex-direction: column; 
-            background: var(--bg); 
-            transform: translateX(100%); 
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); 
-            z-index: 10; 
-            overflow: hidden; 
-        }
+        .screen { position: fixed; inset: 0; height: 100dvh; display: flex; flex-direction: column; background: var(--bg); transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; overflow: hidden; }
         .screen.active { transform: translateX(0); }
 
-        .header { 
-            height: var(--header-h); 
-            display: flex; 
-            align-items: center; 
-            padding: env(safe-area-inset-top) 20px 0; 
-            gap: 14px; 
-            border-bottom: 1px solid var(--border); 
-            background: var(--bg); 
-            flex-shrink: 0; 
-        }
+        .header { height: var(--header-h); display: flex; align-items: center; padding: env(safe-area-inset-top) 20px 0; gap: 14px; border-bottom: 1px solid var(--border); background: var(--bg); flex-shrink: 0; }
         .header-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; flex: 1; }
         .header-title span { color: var(--accent); }
 
-        .icon-btn { width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 16px; font-weight: 600; cursor: pointer; height: 44px; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .icon-btn:active { transform: scale(0.92); background: var(--surface2); }
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 16px; font-weight: 600; cursor: pointer; }
 
         #setupScreen { transform: translateX(0); justify-content: center; padding: 40px 28px; z-index: 100; display: none; }
         #setupScreen.active { display: flex; }
         .setup-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
-        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); padding: 14px; font-size: 16px; outline: none; margin-bottom: 12px; }
-        .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 18px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; }
+        .setup-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); padding: 14px; font-size: 16px; outline: none; margin-bottom: 12px; transition: 0.2s; }
+        .setup-input:focus { border-color: var(--accent); }
+        .primary-btn { width: 100%; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: 16px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(200, 130, 74, 0.2); transition: 0.2s; }
+        .primary-btn:active { transform: scale(0.98); opacity: 0.9; }
 
-        .feed { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 20px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 16px; 
-            padding-bottom: calc(40px + env(safe-area-inset-bottom)); 
-            -webkit-overflow-scrolling: touch;
-        }
+        .feed { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
         
+        /* CARD UPDATES: Centered and Dynamic Height */
         .post-card { 
             background: var(--surface); 
             border: 1px solid var(--border); 
             border-radius: var(--radius); 
             padding: 24px; 
             min-height: auto; 
+            height: auto;
             display: flex; 
             flex-direction: column; 
-            gap: 10px;
+            justify-content: center; 
+            align-items: center;
+            text-align: center;
             cursor: pointer; 
+            transition: 0.2s; 
             width: 100%;
         }
-        .post-card:active { background: var(--surface2); }
-        .post-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; line-height: 1.2; color: var(--text); }
-        .post-summary { font-size: 14px; color: var(--text-muted); line-height: 1.6; display: block; }
+        .post-card:active { transform: scale(0.97); background: var(--surface2); }
+        .post-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; margin-bottom: 10px; line-height: 1.25; }
+        .post-summary { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
 
         .detail-body { padding: 24px 20px 140px; }
-        .section-label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px; margin: 32px 0 12px; display: block; }
+        .section-label { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin: 36px 0 16px; display: block; }
         
-        .rich-content { line-height: 1.8; color: var(--text-muted); font-size: 16px; }
-        .rich-content strong { color: var(--text); font-weight: 700; }
+        .rich-text strong { font-weight: 700; color: var(--text); }
 
-        .chat-fab { position: fixed; bottom: 30px; right: 20px; width: 64px; height: 64px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.5); font-weight: bold; color: white; }
+        .chat-fab { position: fixed; bottom: 30px; right: 20px; width: 64px; height: 64px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 100; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .chat-fab.visible { display: flex; }
-
         #chatScreen { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: none; flex-direction: column; }
         #chatScreen.active { display: flex; }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; -webkit-overflow-scrolling: touch; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
         .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; }
         .msg.ai { align-self: flex-start; background: var(--surface); border: 1px solid var(--border); }
         .msg.user { align-self: flex-end; background: var(--accent); color: white; }
@@ -119,18 +90,18 @@
     <div class="screen" id="setupScreen">
         <div style="text-align:center; margin-bottom: 24px;"><div class="header-title" style="font-size: 40px;">Learn<span>.</span></div></div>
         <div class="setup-card">
-            <input class="setup-input" type="password" id="setupNotionKey" placeholder="Notion Secret Token"/>
+            <input class="setup-input" type="password" id="setupNotionKey" placeholder="Notion Secret Key"/>
             <input class="setup-input" type="text" id="setupDbId" placeholder="Database ID"/>
             <input class="setup-input" type="password" id="setupGeminiKey" placeholder="Gemini API Key"/>
         </div>
-        <button class="primary-btn" onclick="saveSetup()">Connect & Sync</button>
+        <button class="primary-btn" onclick="saveSetup()">Connect Database</button>
     </div>
 
     <div class="screen" id="mainScreen">
         <div class="header">
             <div class="header-title">Learn<span>.</span></div>
             <div class="icon-btn" onclick="loadFeed()">↻</div>
-            <div class="icon-btn" onclick="clearAllData()" style="margin-left:8px;">✕</div>
+            <div class="icon-btn" onclick="clearAllData()" style="margin-left: 10px;">✕</div>
         </div>
         <div class="feed" id="feed"></div>
     </div>
@@ -141,9 +112,15 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
                 Back
             </div>
+            <div style="flex:1"></div>
+            <div class="icon-btn" id="detailBookmarkBtn" onclick="toggleDetailBookmark()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
         </div>
-        <div id="detailContent" style="flex:1; overflow-y:auto; -webkit-overflow-scrolling: touch;"></div>
-        <div class="chat-fab" id="chatFab" onclick="toggleChat(true)">AI</div>
+        <div id="detailContent" style="flex:1; overflow-y:auto;"></div>
+        <div class="chat-fab" id="chatFab" onclick="toggleChat(true)">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
     </div>
 
     <div id="chatScreen">
@@ -152,7 +129,7 @@
             <div class="back-btn" onclick="toggleChat(false)">Close</div>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
-        <div style="padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); background: var(--bg);">
+        <div style="padding: 20px; padding-bottom: 40px; background: var(--bg);">
             <input type="text" id="chatInput" class="setup-input" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') sendChat()"/>
         </div>
     </div>
@@ -174,13 +151,9 @@
     }
 
     function goBack() {
-        if (screenStack.length > 1) {
-            screenStack.pop();
-            showScreen(screenStack[screenStack.length - 1]);
-            if (screenStack[screenStack.length - 1] === 'mainScreen') {
-                document.getElementById('chatFab').classList.remove('visible');
-            }
-        }
+        screenStack.pop();
+        showScreen(screenStack[screenStack.length-1]);
+        if(screenStack[screenStack.length-1] === 'mainScreen') document.getElementById('chatFab').classList.remove('visible');
     }
 
     function saveSetup() {
@@ -190,8 +163,8 @@
         location.reload();
     }
 
-    // Markdown Bold & Line Break Parser
-    function parseContent(text) {
+    // Helper to format **bold** and line breaks
+    function formatMarkdown(text) {
         if (!text) return "";
         return text
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -200,13 +173,14 @@
 
     async function loadFeed() {
         const feed = document.getElementById('feed');
-        feed.innerHTML = '<div style="text-align:center; padding-top:100px; opacity:0.5;">Syncing...</div>';
+        feed.innerHTML = '<div style="text-align:center; padding-top:40px; opacity:0.5;">Loading feed...</div>';
+        
         const key = store.get('notion_key');
         const db = store.get('notion_db');
-        const url = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/databases/${db}/query`)}`;
         
         try {
-            const res = await fetch(url, {
+            const res = await fetch(proxyUrl, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' }
             });
@@ -215,11 +189,12 @@
                 id: p.id,
                 title: p.properties.Title?.title[0]?.plain_text || p.properties.Name?.title[0]?.plain_text || 'Untitled',
                 summary: p.properties.Summary?.rich_text[0]?.plain_text || '',
-                full: (p.properties.full_explanation_pt1?.rich_text[0]?.plain_text || '') + (p.properties.full_explanation_pt2?.rich_text[0]?.plain_text || '')
+                full: (p.properties.full_explanation_pt1?.rich_text[0]?.plain_text || '') + (p.properties.full_explanation_pt2?.rich_text[0]?.plain_text || ''),
+                bookmarked: p.properties.Bookmarked?.checkbox || false
             }));
             renderFeed();
         } catch (e) { 
-            feed.innerHTML = '<div style="text-align:center; padding-top:100px; color:var(--danger)">Connection Error.</div>';
+            feed.innerHTML = '<div style="text-align:center; padding-top:40px; color:var(--danger);">Error syncing with Notion. Check keys.</div>';
         }
     }
 
@@ -238,12 +213,15 @@
         const content = document.getElementById('detailContent');
         content.innerHTML = `
             <div class="detail-body">
-                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; line-height:1.1; margin-bottom:20px;">${currentPost.title}</h1>
-                <p style="color:var(--text-muted); font-size:17px; line-height:1.7; margin-bottom:32px;">${currentPost.summary}</p>
-                <span class="section-label">Analysis</span>
-                <div class="rich-content">${parseContent(currentPost.full)}</div>
+                <h1 style="font-family:'Playfair Display'; font-size:32px; font-weight:900; line-height:1.1; margin-bottom:16px;">${currentPost.title}</h1>
+                <p style="color:var(--text-muted); font-size:17px; line-height:1.7; margin-bottom:30px;">${currentPost.summary}</p>
+                <span class="section-label">Deep Dive Analysis</span>
+                <div class="rich-text" style="line-height:1.8; color:var(--text-muted); font-size:16px;">
+                    ${formatMarkdown(currentPost.full)}
+                </div>
             </div>
         `;
+        document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = currentPost.bookmarked ? 'var(--accent)' : 'none';
         document.getElementById('chatFab').classList.add('visible');
         screenStack.push('detailScreen');
         showScreen('detailScreen');
@@ -259,29 +237,41 @@
         const text = input.value.trim();
         const apiKey = store.get('gemini_key');
         if (!text || !apiKey) return;
-        addMsg('user', text);
+
+        addChatMsg('user', text);
         input.value = '';
+
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: `Context: ${currentPost.full}. Question: ${text}` }] }] })
+                body: JSON.stringify({ contents: [{ parts: [{ text: `Topic: ${currentPost.title}. Context: ${currentPost.full}. Question: ${text}` }] }] })
             });
             const data = await res.json();
-            addMsg('ai', data.candidates[0].content.parts[0].text);
-        } catch (e) { addMsg('ai', 'Error connecting to AI.'); }
+            if (data.candidates && data.candidates[0].content.parts[0].text) {
+                addChatMsg('ai', data.candidates[0].content.parts[0].text);
+            } else {
+                addChatMsg('ai', 'AI Tutor is temporarily busy.');
+            }
+        } catch (e) { addChatMsg('ai', 'Error connecting to AI Tutor.'); }
     }
 
-    function addMsg(role, text) {
-        const msgs = document.getElementById('chatMessages');
+    function addChatMsg(role, text) {
+        const chat = document.getElementById('chatMessages');
         const div = document.createElement('div');
         div.className = `msg ${role}`;
         div.innerText = text;
-        msgs.appendChild(div);
-        msgs.scrollTop = msgs.scrollHeight;
+        chat.appendChild(div);
+        chat.scrollTop = chat.scrollHeight;
     }
 
-    function clearAllData() { if(confirm('Reset?')) { localStorage.clear(); location.reload(); } }
+    async function toggleDetailBookmark() {
+        if(!currentPost) return;
+        currentPost.bookmarked = !currentPost.bookmarked;
+        document.getElementById('detailBookmarkBtn').querySelector('svg').style.fill = currentPost.bookmarked ? 'var(--accent)' : 'none';
+    }
+
+    function clearAllData() { if(confirm('Erase all data and reset?')) { localStorage.clear(); location.reload(); } }
 </script>
 </body>
 </html>
