@@ -393,7 +393,7 @@
         if (!confirm(`Are you sure you want to delete "${currentPost.title}" from your library and Notion?`)) return;
 
         const key = store.get('notion_key');
-        const pageId = currentPost.id.replace(/-/g, '');
+        const pageId = currentPost.id;
         const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
 
         try {
@@ -473,30 +473,19 @@
     async function toggleRead() {
         if (!currentPost) return;
         const key = store.get('notion_key');
-        const pageId = currentPost.id.replace(/-/g, '');
+        const pageId = currentPost.id;
         const newStatus = !currentPost.read;
-        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
-
-        // Optimistically update UI
         currentPost.read = newStatus;
         allPosts = allPosts.map(p => p.id === currentPost.id ? { ...p, read: newStatus } : p);
         document.getElementById('detailReadBtn').classList.toggle('read', newStatus);
-
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(`https://api.notion.com/v1/pages/${pageId}`)}`;
         try {
-            const res = await fetch(proxyUrl, {
+            await fetch(proxyUrl, {
                 method: 'PATCH',
                 headers: { 'Authorization': `Bearer ${key}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
                 body: JSON.stringify({ properties: { 'Read': { checkbox: newStatus } } })
             });
-            if (!res.ok) throw new Error('Notion API error: ' + res.status);
-        } catch (e) {
-            // Revert optimistic update if Notion save failed
-            console.error('Failed to sync read status to Notion', e);
-            currentPost.read = !newStatus;
-            allPosts = allPosts.map(p => p.id === currentPost.id ? { ...p, read: !newStatus } : p);
-            document.getElementById('detailReadBtn').classList.toggle('read', !newStatus);
-            alert('Could not save to Notion. Check your connection and try again.');
-        }
+        } catch (e) { console.error('Failed to sync read status to Notion'); }
     }
 
     function applyTheme(name) { document.body.className = `theme-${name}`; store.set('theme', name); }
@@ -506,7 +495,7 @@
     async function toggleDetailBookmark() {
         if(!currentPost) return;
         const key = store.get('notion_key');
-        const pageId = currentPost.id.replace(/-/g, '');
+        const pageId = currentPost.id;
         const newStatus = !currentPost.bookmarked;
         
         currentPost.bookmarked = newStatus;
